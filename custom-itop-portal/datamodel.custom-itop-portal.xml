@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+  <constants>
+    <constant id="PORTAL_NETWORKDEVICE_LIST_ZLIST" xsi:type="string" _delta="define"><![CDATA[networkdevicetype_id,location_id,brand_id,model_id,real_ip]]></constant>
+    <constant id="PORTAL_DEVICES_SEARCH_CRITERIA" xsi:type="string" _delta="define"><![CDATA[networkdevicetype_id,location_id]]></constant>
+  </constants>
+</itop_design>

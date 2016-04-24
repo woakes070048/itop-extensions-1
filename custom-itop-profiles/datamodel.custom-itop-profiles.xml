@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+  <user_rights>
+    <groups>
+      <group id="Service" _delta="redefine">
+        <classes>
+          <class id="Contract"/>
+          <class id="ProviderContract"/>
+          <class id="CustomerContract"/>
+          <class id="lnkCustomerContractToProviderContract"/>
+          <class id="lnkContractToSLA"/>
+          <class id="lnkContractToDoc"/>
+          <class id="lnkContractToContact"/>
+          <class id="lnkContractToCI"/>
+          <class id="Service"/>
+          <class id="ServiceSubcategory"/>
+          <class id="SLA"/>
+          <class id="SLT"/>
+          <class id="lnkSLTToSLA"/>
+          <class id="lnkServiceToDoc"/>
+          <class id="lnkServiceToContact"/>
+          <class id="lnkServiceToCI"/>
+          <class id="lnkCustomerContractToServiceSubcategory"/>
+        </classes>
+      </group>
+      <group id="User" _delta="define">
+        <classes>
+          <class id="User"/>
+        </classes>
+      </group>
+      <group id="Attachment" _delta="define">
+        <classes>
+          <class id="Attachment"/>
+        </classes>
+      </group>
+      <group id="Request" _delta="define">
+        <classes>
+          <class id="lnkTicketToDoc"/>
+          <class id="lnkTicketToContact"/>
+          <class id="lnkTicketToCI"/>
+          <class id="lnkTicketToIncident"/>
+          <class id="UserRequest"/>
+        </classes>
+      </group>
+    </groups>
+    <profiles>
+      <profile id="50" _delta="define">
+        <name>Aranya Portal</name>
+        <description>Aranya Portal</description>
+        <groups>
+          <group id="Request">
+            <actions>
+              <action xsi:type="write">allow</action>
+              <action xsi:type="bulk write">allow</action>
+              <action id="ev_reopen" xsi:type="stimulus">allow</action>
+              <action id="ev_close" xsi:type="stimulus">allow</action>
+            </actions>
+          </group>
+          <group id="Incident">
+            <actions>
+              <action xsi:type="write">allow</action>
+              <action xsi:type="bulk write">allow</action>
+              <action id="ev_reopen" xsi:type="stimulus">allow</action>
+              <action id="ev_close" xsi:type="stimulus">allow</action>
+            </actions>
+          </group>
+          <group id="Attachment">
+            <actions>
+              <action xsi:type="write">allow</action>
+              <action xsi:type="bulk write">allow</action>
+            </actions>
+          </group>
+          <group id="*">
+            <actions>
+              <action xsi:type="read">allow</action>
+              <action xsi:type="bulk read">allow</action>
+            </actions>
+          </group>
+        </groups>
+      </profile>
+    </profiles>
+  </user_rights>
+</itop_design>

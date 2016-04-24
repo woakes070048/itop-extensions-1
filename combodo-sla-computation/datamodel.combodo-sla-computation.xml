@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+  <constants>
+    <constant id="COVERAGE_TIME_REGEXP" xsi:type="string" _delta="define"><![CDATA[^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$]]></constant>
+  </constants>
+  <classes>
+    <class id="CoverageWindow" _delta="define">
+      <parent>cmdbAbstractObject</parent>
+      <php_parent>
+		  <name>_CoverageWindow_</name>
+		  <file>coveragewindow.class.inc.php</file>
+	   </php_parent>
+      <properties>
+        <comment>/**
+ * Open hours definition: start time and end time for each day of the week
+ */</comment>
+        <category>searchable,bizmodel,servicemgmt</category>
+        <abstract>false</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>coverage_windows</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field></db_final_class_field>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="name"/>
+          </attributes>
+        </naming>
+        <display_template></display_template>
+        <icon>images/coverage-window.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="name"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="name" xsi:type="AttributeString">
+          <sql>name</sql>
+          <default_value></default_value>
+          <is_null_allowed>false</is_null_allowed>
+        </field>
+        <field id="description" xsi:type="AttributeText">
+          <sql>description</sql>
+          <default_value></default_value>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="monday_start" xsi:type="AttributeString">
+          <sql>monday_start</sql>
+          <default_value>09:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="monday_end" xsi:type="AttributeString">
+          <sql>monday_end</sql>
+          <default_value>18:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="tuesday_start" xsi:type="AttributeString">
+          <sql>tuesday_start</sql>
+          <default_value>09:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="tuesday_end" xsi:type="AttributeString">
+          <sql>tuesday_end</sql>
+          <default_value>18:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="wednesday_start" xsi:type="AttributeString">
+          <sql>wendnesday_start</sql>
+          <default_value>09:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="wednesday_end" xsi:type="AttributeString">
+          <sql>wednesday_end</sql>
+          <default_value>18:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="thursday_start" xsi:type="AttributeString">
+          <sql>thursday_start</sql>
+          <default_value>09:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="thursday_end" xsi:type="AttributeString">
+          <sql>thursday_end</sql>
+          <default_value>18:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="friday_start" xsi:type="AttributeString">
+          <sql>friday_start</sql>
+          <default_value>09:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="friday_end" xsi:type="AttributeString">
+          <sql>friday_end</sql>
+          <default_value>18:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="saturday_start" xsi:type="AttributeString">
+          <sql>saturday_start</sql>
+          <default_value>00:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="saturday_end" xsi:type="AttributeString">
+          <sql>saturday_end</sql>
+          <default_value>00:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="sunday_start" xsi:type="AttributeString">
+          <sql>sunday_start</sql>
+          <default_value>00:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+        <field id="sunday_end" xsi:type="AttributeString">
+          <sql>sunday_end</sql>
+          <default_value>00:00</default_value>
+          <is_null_allowed>false</is_null_allowed>
+          <validation_pattern>^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$|^24:00$</validation_pattern>
+        </field>
+      </fields>
+      <methods>
+      </methods>
+      <presentation>
+        <details>
+          <items>
+            <item id="col:col1">
+              <rank>10</rank>
+              <items>
+                <item id="fieldset:Coverage:Description">
+                  <rank>10</rank>
+                  <items>
+                    <item id="name">
+                      <rank>10</rank>
+                    </item>
+                    <item id="description">
+                      <rank>20</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+            <item id="col:col2">
+              <rank>20</rank>
+              <items>
+                <item id="fieldset:Coverage:StartTime">
+                  <rank>10</rank>
+                  <items>
+                    <item id="monday_start">
+                      <rank>10</rank>
+                    </item>
+                    <item id="tuesday_start">
+                      <rank>20</rank>
+                    </item>
+                    <item id="wednesday_start">
+                      <rank>30</rank>
+                    </item>
+                    <item id="thursday_start">
+                      <rank>40</rank>
+                    </item>
+                    <item id="friday_start">
+                      <rank>50</rank>
+                    </item>
+                    <item id="saturday_start">
+                      <rank>60</rank>
+                    </item>
+                    <item id="sunday_start">
+                      <rank>70</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+            <item id="col:col3">
+              <rank>30</rank>
+              <items>
+                <item id="fieldset:Coverage:EndTime">
+                  <rank>10</rank>
+                  <items>
+                    <item id="monday_end">
+                      <rank>10</rank>
+                    </item>
+                    <item id="tuesday_end">
+                      <rank>20</rank>
+                    </item>
+                    <item id="wednesday_end">
+                      <rank>30</rank>
+                    </item>
+                    <item id="thursday_end">
+                      <rank>40</rank>
+                    </item>
+                    <item id="friday_end">
+                      <rank>50</rank>
+                    </item>
+                    <item id="saturday_end">
+                      <rank>60</rank>
+                    </item>
+                    <item id="sunday_end">
+                      <rank>70</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+        <search>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+          </items>
+        </search>
+      </presentation>
+    </class>
+    <class id="Holiday" _delta="define">
+      <parent>cmdbAbstractObject</parent>
+      <properties>
+        <category>searchable,bizmodel,servicemgmt</category>
+        <abstract>false</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>holidays</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field></db_final_class_field>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="name"/>
+          </attributes>
+        </naming>
+        <display_template></display_template>
+        <icon>images/holiday.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="name"/>
+            <attribute id="date"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="name" xsi:type="AttributeString">
+          <sql>name</sql>
+          <default_value></default_value>
+          <is_null_allowed>false</is_null_allowed>
+        </field>
+        <field id="date" xsi:type="AttributeDate">
+          <sql>date</sql>
+          <default_value></default_value>
+          <is_null_allowed>false</is_null_allowed>
+        </field>
+        <field id="calendar_id" xsi:type="AttributeExternalKey">
+          <filter>SELECT HolidayCalendar</filter>
+          <sql>calendar_id</sql>
+          <target_class>HolidayCalendar</target_class>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_AUTO</on_target_delete>
+          <jointype></jointype>
+        </field>
+        <field id="calendar_name" xsi:type="AttributeExternalField">
+          <extkey_attcode>calendar_id</extkey_attcode>
+          <target_attcode>name</target_attcode>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+      </fields>
+      <methods/>
+      <presentation>
+        <details>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="date">
+              <rank>20</rank>
+            </item>
+            <item id="calendar_id">
+              <rank>30</rank>
+            </item>
+          </items>
+        </details>
+        <search>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="date">
+              <rank>20</rank>
+            </item>
+            <item id="calendar_id">
+              <rank>30</rank>
+            </item>
+          </items>
+        </search>
+        <list>
+          <items>
+            <item id="date">
+              <rank>10</rank>
+            </item>
+            <item id="calendar_id">
+              <rank>20</rank>
+            </item>
+          </items>
+        </list>
+      </presentation>
+    </class>
+    <class id="HolidayCalendar" _delta="define">
+      <parent>cmdbAbstractObject</parent>
+      <properties>
+        <category>searchable,bizmodel,servicemgmt</category>
+        <abstract>false</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>holiday_calendar</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field></db_final_class_field>
+        <naming>
+          <format>%1$s</format>
+          <attributes>
+            <attribute id="name"/>
+          </attributes>
+        </naming>
+        <display_template></display_template>
+        <icon>images/calendar.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="name"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+        <field id="name" xsi:type="AttributeString">
+          <sql>name</sql>
+          <default_value></default_value>
+          <is_null_allowed>false</is_null_allowed>
+        </field>
+        <field id="holiday_list" xsi:type="AttributeLinkedSet">
+          <linked_class>Holiday</linked_class>
+          <ext_key_to_me>calendar_id</ext_key_to_me>
+          <count_min>0</count_min>
+          <count_max>0</count_max>
+        </field>
+      </fields>
+      <methods/>
+      <presentation>
+        <details>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="holiday_list">
+              <rank>20</rank>
+            </item>
+          </items>
+        </details>
+        <search>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+          </items>
+        </search>
+      </presentation>
+    </class>
+  </classes>
+  <menus>
+    <menu id="CoverageWindows" xsi:type="OQLMenuNode" _delta="define">
+      <rank>10</rank>
+      <parent>ServiceManagement</parent>
+      <oql>SELECT CoverageWindow</oql>
+      <do_search>1</do_search>
+    </menu>
+    <menu id="HolidayCalendars" xsi:type="OQLMenuNode" _delta="define">
+      <rank>11</rank>
+      <parent>ServiceManagement</parent>
+      <oql>SELECT HolidayCalendar</oql>
+      <do_search>1</do_search>
+    </menu>
+    <menu id="Holidays" xsi:type="OQLMenuNode" _delta="define">
+      <rank>12</rank>
+      <parent>ServiceManagement</parent>
+      <oql>SELECT Holiday</oql>
+      <do_search>1</do_search>
+    </menu>
+  </menus>
+  <user_rights>
+    <groups>
+      <group id="CoverageWindowsEtc" _delta="define">
+        <classes>
+          <class id="CoverageWindow"/>
+          <class id="HolidayCalendar"/>
+          <class id="Holiday"/>
+        </classes>
+      </group>
+    </groups>
+    <profiles>
+      <profile id="10">
+        <groups>
+          <group id="CoverageWindowsEtc" _delta="define">
+            <actions>
+              <action xsi:type="write">allow</action>
+              <action xsi:type="bulk write">allow</action>
+              <action xsi:type="delete">allow</action>
+            </actions>
+          </group>
+        </groups>
+      </profile>
+    </profiles>
+  </user_rights>
+</itop_design>

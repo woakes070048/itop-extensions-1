@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+  <constants>
+  </constants>
+  <classes>
+    <class id="NetworkDevice">
+      <fields>
+        <field id="ci_owner" xsi:type="AttributeExternalKey" _delta="define">
+          <sql>ci_owner</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_AUTO</on_target_delete>
+          <target_class>Organization</target_class>
+        </field>
+        <field id="owner_ref" xsi:type="AttributeString" _delta="define">
+          <sql>owner_ref</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="internal_ref" xsi:type="AttributeString" _delta="define">
+          <sql>internal_ref</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="customer_ref" xsi:type="AttributeString" _delta="define">
+          <sql>customer_ref</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="mac_addr" xsi:type="AttributeString" _delta="define">
+          <sql>mac_addr</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="service_tag" xsi:type="AttributeString" _delta="define">
+          <sql>service_tag</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="real_ip" xsi:type="AttributeString" _delta="define">
+          <sql>real_ip</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+      </fields>
+      <methods>
+        <method id="DoCheckToWrite" _delta="define">
+          <static>false</static>
+          <access>protected</access>
+          <type>Overload-DBObject</type>
+          <code><![CDATA[       public function DoCheckToWrite()
+          {
+          parent::DoCheckToWrite();
+          $aChanges = $this->ListChanges();
+          if (array_key_exists('name', $aChanges))
+          {
+                  $NetworkDevice = $aChanges['name'];
+                  $oSearch = DBObjectSearch::FromOQL_AllData("SELECT NetworkDevice WHERE name=:name");
+                  $oSet = new DBObjectSet($oSearch, array(), array('name' => $NetworkDevice));
+                  if ($oSet->Count() > 0)
+                  {
+                          $this->m_aCheckIssues[] = Dict::Format('Class:NetworkDevice/Error:NetworkDeviceMustBeUnique', $NetworkDevice);
+                  }
+          }
+          }]]></code>
+        </method>
+      </methods>
+      <presentation>
+        <details _delta="redefine">
+          <items>
+            <item id="contacts_list">
+              <rank>10</rank>
+            </item>
+            <item id="documents_list">
+              <rank>20</rank>
+            </item>
+            <item id="tickets_list">
+              <rank>30</rank>
+            </item>
+            <item id="applicationsolution_list">
+              <rank>35</rank>
+            </item>
+            <item id="physicalinterface_list">
+              <rank>40</rank>
+            </item>
+            <item id="connectablecis_list">
+              <rank>50</rank>
+            </item>
+            <item id="providercontracts_list">
+              <rank>60</rank>
+            </item>
+            <item id="services_list">
+              <rank>70</rank>
+            </item>
+            <item id="col:col1">
+              <rank>80</rank>
+              <items>
+                <item id="fieldset:Server:baseinfo">
+                  <rank>10</rank>
+                  <items>
+                    <item id="name">
+                      <rank>10</rank>
+                    </item>
+                    <item id="org_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="status">
+                      <rank>30</rank>
+                    </item>
+                    <item id="business_criticity">
+                      <rank>40</rank>
+                    </item>
+                    <item id="location_id">
+                      <rank>50</rank>
+                    </item>
+                    <item id="rack_id">
+                      <rank>60</rank>
+                    </item>
+                    <item id="enclosure_id">
+                      <rank>70</rank>
+                    </item>
+                    <item id="service_id">
+                      <rank>80</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Server:moreinfo">
+                  <rank>20</rank>
+                  <items>
+                    <item id="networkdevicetype_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="brand_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="model_id">
+                      <rank>30</rank>
+                    </item>
+                    <item id="iosversion_id">
+                      <rank>40</rank>
+                    </item>
+                    <item id="managementip">
+                      <rank>45</rank>
+                    </item>
+                    <item id="real_ip">
+                      <rank>46</rank>
+                    </item>
+                    <item id="mac_addr">
+                      <rank>50</rank>
+                    </item>
+                    <item id="serialnumber">
+                      <rank>60</rank>
+                    </item>
+                    <item id="asset_number">
+                      <rank>70</rank>
+                    </item>
+                    <item id="service_tag">
+                      <rank>80</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+            <item id="col:col2">
+              <rank>90</rank>
+              <items>
+                <item id="fieldset:Server:Date">
+                  <rank>10</rank>
+                  <items>
+                    <item id="move2production">
+                      <rank>10</rank>
+                    </item>
+                    <item id="purchase_date">
+                      <rank>20</rank>
+                    </item>
+                    <item id="end_of_warranty">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Server:economicdetails">
+                  <rank>20</rank>
+                  <items>
+                    <item id="ci_owner">
+                      <rank>10</rank>
+                    </item>
+                    <item id="owner_ref">
+                      <rank>20</rank>
+                    </item>
+                    <item id="internal_ref">
+                      <rank>30</rank>
+                    </item>
+                    <item id="customer_ref">
+                      <rank>40</rank>
+                    </item>
+                  </items>
+                </item>
+                <item id="fieldset:Server:otherinfo">
+                  <rank>30</rank>
+                  <items>
+                    <item id="powerA_id">
+                      <rank>10</rank>
+                    </item>
+                    <item id="powerB_id">
+                      <rank>20</rank>
+                    </item>
+                    <item id="description">
+                      <rank>30</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+        <search>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="org_id">
+              <rank>20</rank>
+            </item>
+            <item id="status">
+              <rank>30</rank>
+            </item>
+            <item id="business_criticity">
+              <rank>40</rank>
+            </item>
+            <item id="location_id">
+              <rank>50</rank>
+            </item>
+            <item id="managementip">
+              <rank>55</rank>
+            </item>
+            <item id="brand_id">
+              <rank>60</rank>
+            </item>
+            <item id="model_id">
+              <rank>70</rank>
+            </item>
+            <item id="serialnumber">
+              <rank>80</rank>
+            </item>
+            <item id="asset_number">
+              <rank>90</rank>
+            </item>
+            <item id="powerA_id">
+              <rank>100</rank>
+            </item>
+            <item id="powerB_id">
+              <rank>110</rank>
+            </item>
+            <item id="move2production">
+              <rank>120</rank>
+            </item>
+            <item id="purchase_date">
+              <rank>130</rank>
+            </item>
+            <item id="end_of_warranty">
+              <rank>140</rank>
+            </item>
+            <item id="service_id">
+              <rank>150</rank>
+            </item>
+          </items>
+        </search>
+        <list>
+          <items>
+            <item id="org_id">
+              <rank>10</rank>
+            </item>
+            <item id="status">
+              <rank>20</rank>
+            </item>
+            <item id="business_criticity">
+              <rank>30</rank>
+            </item>
+            <item id="location_id">
+              <rank>40</rank>
+            </item>
+            <item id="brand_id">
+              <rank>50</rank>
+            </item>
+            <item id="model_id">
+              <rank>60</rank>
+            </item>
+            <item id="serialnumber">
+              <rank>70</rank>
+            </item>
+            <item id="service_id">
+              <rank>80</rank>
+            </item>
+          </items>
+        </list>
+      </presentation>
+    </class>
+    <class id="PhysicalDevice">
+      <fields>
+        <field id="status" xsi:type="AttributeEnum" _delta="redefine">
+          <values>
+            <value>production</value>
+            <value>implementation</value>
+            <value>stock</value>
+            <value>obsolete</value>
+            <value>NFR</value>
+          </values>
+          <sql>status</sql>
+          <default_value>production</default_value>
+          <is_null_allowed>true</is_null_allowed>
+          <display_style>list</display_style>
+        </field>
+      </fields>
+    </class>
+    <class id="Brand">
+      <fields>
+        <field id="org_id" xsi:type="AttributeExternalKey" _delta="define">
+          <sql>org_id</sql>
+          <is_null_allowed>false</is_null_allowed>
+          <on_target_delete>DEL_AUTO</on_target_delete>
+          <target_class>Organization</target_class>
+        </field>
+      </fields>
+      <presentation>
+        <details>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="org_id">
+              <rank>15</rank>
+            </item>
+            <item id="physicaldevices_list">
+              <rank>20</rank>
+            </item>
+          </items>
+        </details>
+        <search>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="org_id">
+              <rank>15</rank>
+            </item>
+          </items>
+        </search>
+        <list>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="org_id">
+              <rank>15</rank>
+            </item>
+          </items>
+        </list>
+      </presentation>
+    </class>
+    <class id="Location">
+      <fields>
+        <field id="cost_center" xsi:type="AttributeString" _delta="define">
+          <sql>cost_center</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+      </fields>
+      <presentation>
+        <details _delta="redefine">
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="status">
+              <rank>20</rank>
+            </item>
+            <item id="org_id">
+              <rank>30</rank>
+            </item>
+            <item id="address">
+              <rank>40</rank>
+            </item>
+            <item id="postal_code">
+              <rank>50</rank>
+            </item>
+            <item id="city">
+              <rank>60</rank>
+            </item>
+            <item id="country">
+              <rank>70</rank>
+            </item>
+            <item id="person_list">
+              <rank>80</rank>
+            </item>
+            <item id="physicaldevice_list">
+              <rank>90</rank>
+            </item>
+            <item id="cost_center">
+              <rank>100</rank>
+            </item>
+          </items>
+        </details>
+        <search>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="status">
+              <rank>20</rank>
+            </item>
+            <item id="org_id">
+              <rank>30</rank>
+            </item>
+            <item id="address">
+              <rank>40</rank>
+            </item>
+            <item id="postal_code">
+              <rank>50</rank>
+            </item>
+            <item id="city">
+              <rank>60</rank>
+            </item>
+            <item id="country">
+              <rank>70</rank>
+            </item>
+            <item id="cost_center">
+              <rank>80</rank>
+            </item>
+          </items>
+        </search>
+        <list>
+          <items>
+            <item id="status">
+              <rank>10</rank>
+            </item>
+            <item id="org_id">
+              <rank>20</rank>
+            </item>
+            <item id="city">
+              <rank>30</rank>
+            </item>
+            <item id="country">
+              <rank>40</rank>
+            </item>
+            <item id="cost_center">
+              <rank>50</rank>
+            </item>
+          </items>
+        </list>
+      </presentation>
+    </class>
+    <class id="Organization">
+      <fields>
+        <field id="snmp_community" xsi:type="AttributeString" _delta="define">
+          <sql>snmp_community</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+      </fields>
+      <presentation>
+        <details>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="code">
+              <rank>20</rank>
+            </item>
+            <item id="status">
+              <rank>30</rank>
+            </item>
+            <item id="parent_id">
+              <rank>40</rank>
+            </item>
+            <item id="snmp_community">
+              <rank>50</rank>
+            </item>
+          </items>
+        </details>
+        <search>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="code">
+              <rank>20</rank>
+            </item>
+            <item id="status">
+              <rank>30</rank>
+            </item>
+            <item id="parent_id">
+              <rank>40</rank>
+            </item>
+            <item id="snmp_community">
+              <rank>50</rank>
+            </item>
+          </items>
+        </search>
+        <list>
+          <items>
+            <item id="code">
+              <rank>10</rank>
+            </item>
+            <item id="status">
+              <rank>20</rank>
+            </item>
+            <item id="parent_id">
+              <rank>30</rank>
+            </item>
+            <item id="snmp_community">
+              <rank>40</rank>
+            </item>
+          </items>
+        </list>
+      </presentation>
+    </class>
+     <class id="SoftwareInstance">
+      <fields>
+        <field id="system_id" xsi:type="AttributeExternalKey" _delta="redefine">
+          <filter><![CDATA[SELECT FunctionalCI WHERE finalclass IN ('Server','NetworkDevice') AND org_id = :this->org_id]]></filter>
+          <dependencies>
+            <attribute id="org_id"/>
+          </dependencies>
+          <sql>functionalci_id</sql>
+          <target_class>FunctionalCI</target_class>
+          <is_null_allowed>false</is_null_allowed>
+          <on_target_delete>DEL_AUTO</on_target_delete>
+          <allow_target_creation>false</allow_target_creation>
+        </field>
+      </fields>
+    </class>
+    <class id="FunctionalCI">
+      <fields>
+        <field id="service_id" xsi:type="AttributeExternalKey" _delta="define">
+          <sql>service_id</sql>
+          <target_class>Service</target_class>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+          <on_target_delete>DEL_AUTO</on_target_delete>
+          <allow_target_creation>false</allow_target_creation>
+        </field>
+      </fields>
+    </class>
+    <class id="Middleware">
+      <presentation>
+        <details _delta="redefine">
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="org_id">
+              <rank>20</rank>
+            </item>
+            <item id="status">
+              <rank>30</rank>
+            </item>
+            <item id="business_criticity">
+              <rank>40</rank>
+            </item>
+            <item id="system_id">
+              <rank>50</rank>
+            </item>
+            <item id="software_id">
+              <rank>60</rank>
+            </item>
+            <item id="softwarelicence_id">
+              <rank>70</rank>
+            </item>
+            <item id="path">
+              <rank>80</rank>
+            </item>
+            <item id="move2production">
+              <rank>90</rank>
+            </item>
+            <item id="description">
+              <rank>100</rank>
+            </item>
+            <item id="service_id">
+              <rank>105</rank>
+            </item>
+            <item id="contacts_list">
+              <rank>110</rank>
+            </item>
+            <item id="documents_list">
+              <rank>120</rank>
+            </item>
+            <item id="tickets_list">
+              <rank>130</rank>
+            </item>
+            <item id="applicationsolution_list">
+              <rank>140</rank>
+            </item>
+            <item id="middlewareinstance_list">
+              <rank>150</rank>
+            </item>
+            <item id="providercontracts_list">
+              <rank>160</rank>
+            </item>
+            <item id="services_list">
+              <rank>170</rank>
+            </item>
+          </items>
+        </details>
+        <search>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="org_id">
+              <rank>20</rank>
+            </item>
+            <item id="business_criticity">
+              <rank>30</rank>
+            </item>
+            <item id="move2production">
+              <rank>40</rank>
+            </item>
+            <item id="service_id">
+              <rank>50</rank>
+            </item>
+          </items>
+        </search>
+        <list>
+          <items>
+            <item id="org_id">
+              <rank>10</rank>
+            </item>
+            <item id="business_criticity">
+              <rank>20</rank>
+            </item>
+            <item id="system_id">
+              <rank>30</rank>
+            </item>
+            <item id="software_id">
+              <rank>40</rank>
+            </item>
+            <item id="service_id">
+              <rank>50</rank>
+            </item>
+          </items>
+        </list>
+      </presentation>
+    </class>
+  </classes>
+  <menus>
+    <menu id="NewNetworkDevice" xsi:type="NewObjectMenuNode" _delta="define">
+      <rank>5</rank>
+      <parent>ConfigManagement</parent>
+      <class>NetworkDevice</class>
+    </menu>
+  </menus>
+</itop_design>

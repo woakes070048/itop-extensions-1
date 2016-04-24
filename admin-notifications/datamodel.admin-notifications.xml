@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <classes>
+    <class id="Ticket" _delta="must_exist">
+      <fields>
+        <field id="admin_update" xsi:type="AttributeBoolean" _delta="define">
+          <sql>admin_update</sql>
+          <is_null_allowed>true</is_null_allowed>
+          <default_value/>
+        </field>
+      </fields>
+      <methods>
+        <method id="ComputeValues" _delta="define">
+          <static>false</static>
+          <access>public</access>
+          <type>Overload-DBObject</type>
+          <code><![CDATA[	public function ComputeValues()
+	{
+		parent::ComputeValues();
+		if (UserRights::IsAdministrator())
+		{
+			$this->Set('admin_update', true);
+		}
+		else
+		{
+			$this->Set('admin_update', false);
+		}
+	}]]></code>
+        </method>
+      </methods>
+    </class>
+  </classes>
+  <dictionaries>
+    <dictionary id="EN US" _delta="must_exist">
+      <entries>
+        <entry id="Class:Ticket/Attribute:admin_update" _delta="define"><![CDATA[Admin update]]></entry>
+        <entry id="Class:Ticket/Attribute:admin_update+" _delta="define"><![CDATA[]]></entry>
+      </entries>
+    </dictionary>
+  </dictionaries>
+</itop_design>
