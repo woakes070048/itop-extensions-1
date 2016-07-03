@@ -159,6 +159,7 @@ class RawEmailMessage
 	 */
 	public function GetAttachments(&$aAttachments = null, $aPart = null, &$index = 1)
 	{
+		static $iAttachmentCount = 0;
 		if ($aAttachments === null) $aAttachments = array();
 		if ($aPart === null) $aPart = $this->aParts; //Init for recursion
 		
@@ -172,12 +173,21 @@ class RawEmailMessage
 				{
 					$sFileName = $aMatches[1];
 				}
+				else if (($sContentDisposition != '') && (preg_match('/filename=([^"]+)/', $sContentDisposition, $aMatches))) // same but without quotes
+				{
+					$sFileName = $aMatches[1];
+				}
 				
 				$sType = '';
 				$sContentId = $this->GetHeader('content-id', $aPart['headers']);
 				if (($sContentId != '') && (preg_match('/^<(.+)>$/', $sContentId, $aMatches)))
 				{
 					$sContentId = $aMatches[1];
+				}
+				else
+				{
+					$sContentId = 'itop_'.$iAttachmentCount;
+					$iAttachmentCount++;
 				}
 				$sContentType = $this->GetHeader('content-type', $aPart['headers']);
 				if (($sContentType != '') && (preg_match('/^([^;]+)/', $sContentType, $aMatches)))
@@ -502,7 +512,10 @@ class RawEmailMessage
 			}
 			else // the current header continues on this line
 			{
-				$aRawFields[$sCurrentHeader] .= substr($sLine, 1);
+				if (isset($aRawFields[$sCurrentHeader]))
+				{
+					$aRawFields[$sCurrentHeader] .= substr($sLine, 1);
+				}
 			}
 			$idx++;
 		}

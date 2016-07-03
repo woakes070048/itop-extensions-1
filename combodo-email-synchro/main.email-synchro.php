@@ -269,7 +269,7 @@ class EmailMessage {
 	
 	public function IsValid()
 	{
-		$bValid = !empty($this->sUIDL) && !empty($this->sSubject) && !empty($this->sCallerEmail) && !empty($this->sCallerName);
+		$bValid = !empty($this->sUIDL) && !empty($this->sCallerEmail) && !empty($this->sCallerName);
 
 		foreach($this->aAttachments as $aAttachment)
 		{
@@ -298,6 +298,9 @@ class EmailMessage {
 		// Completely remove the <style>...</style> tags, including their contents
 		$sStyleExpr = '|<style>(.*)</style>|iUs';
 		$sBodyText = preg_replace($sStyleExpr, '', $sText);
+		
+		// Preserve hyperlinks <pre>...</pre> tags
+		$sBodyText = preg_replace_callback('|<a([^>]*)>(.*)</a>|isU', array($this, 'AnchorsReplaceCallback'), $sBodyText);
 		
 		// Preserve new lines inside <pre>...</pre> tags
 		$sBodyText = preg_replace_callback('|<pre>(.*)</pre>|isU', array($this, 'PregReplaceCallback'), $sBodyText);
@@ -328,6 +331,36 @@ class EmailMessage {
 	}
 	
 	/**
+	 * Function used with preg_replace_callback to replace the anchors/hyperlinks tags <a ...>...</a>
+	 * @param hash $aMatches
+	 * @return string
+	 */
+	protected function AnchorsReplaceCallback($aMatches)
+	{
+		$sAttributes = $aMatches[1];
+		if(preg_match('/href="([^"]+)"/', $sAttributes, $aHrefMatches))
+		{
+			// Hyperlinks
+			if (substr($aHrefMatches[1], 0, 7) == 'mailto:')
+			{
+				// "mailto:" hyperlinks: keep only the email address (will not be clickable in iTop anyhow)
+				$sText = ' '.substr($aHrefMatches[1], 7).' ';
+			}
+			else
+			{
+				// Other type of hyperlink, keep as-is, the display in iTop will turn it back into a clickable hyperlink
+				$sText = ' '. $aHrefMatches[1].' ';
+			}
+		}
+		else
+		{
+			// No hyperlink, just keep the text of the anchor
+			$sText = $aMatches[2];
+		}
+		return $sText;
+	}
+	
+	/**
 	 * Function used with preg_replace_callback to replace the newlines inside the <pre>...</pre> tags
 	 * @param hash $aMatches
 	 * @return string
@@ -346,33 +379,35 @@ class EmailMessage {
 	{
 		if ($sBodyText === null)
 		{
-			$sBodyText == $this->sBodyText;
+			$sBodyText = $this->sBodyText;
 		}
 		if ($sBodyFormat === null)
 		{
-			$sBodyFormat == $this->sBodyFormat;
+			$sBodyFormat = $this->sBodyFormat;
 		}
 		$this->sTrace .= "Beginning of GetNewPart:\n";
 		$this->sTrace .= "=== eMail body ({$sBodyFormat}): ===\n{$sBodyText}\n=============\n";
-		$aIntroductoryPatterns = MetaModel::GetModuleSetting('combodo-email-synchro', 'introductory-patterns',
-			array(
-				'/^De : .+$/', // Outlook French
-				'/^le .+ a écrit :$/i', // Thunderbird French
-				'/^on .+ wrote:$/i', // Thunderbird English
-				'|^[0-9]{4}/[0-9]{1,2}/[0-9]{1,2} .+:$|', // Gmail style
-			)
+		$aIntroductoryPatterns = array(
+			'/^De : .+$/', // Outlook French
+			'/^le .+ a écrit :$/i', // Thunderbird French
+			'/^on .+ wrote:$/i', // Thunderbird English
+			'|^[0-9]{4}/[0-9]{1,2}/[0-9]{1,2} .+:$|', // Gmail style
 		);
-		$aGlobalDelimiterPatterns = MetaModel::GetModuleSetting('combodo-email-synchro', 'multiline-delimiter-patterns',
-			array(
-				"/\RFrom: .+\RSent: .+\R/m",
-				"/\RDe : .+\REnvoyé : .+\R/m",
-			)
+		$aGlobalDelimiterPatterns = array(
+			"/\RFrom: .+\RSent: .+\R/m",
+			"/\RDe : .+\REnvoyé : .+\R/m",
 		);
-		$aDelimiterPatterns = MetaModel::GetModuleSetting('combodo-email-synchro', 'delimiter-patterns',
-			array(
-				'/^>.*$/' => false, // Old fashioned mail clients: continue processing the lines, each of them is preceded by >
-			)
+		$aDelimiterPatterns =  array(
+			'/^>.*$/' => false, // Old fashioned mail clients: continue processing the lines, each of them is preceded by >
 		);
+
+		if (class_exists('MetaModel'))
+		{
+			$aIntroductoryPatterns = MetaModel::GetModuleSetting('combodo-email-synchro', 'introductory-patterns', $aIntroductoryPatterns);	
+			$aGlobalDelimiterPatterns = MetaModel::GetModuleSetting('combodo-email-synchro', 'multiline-delimiter-patterns', $aGlobalDelimiterPatterns);
+			$aDelimiterPatterns = MetaModel::GetModuleSetting('combodo-email-synchro', 'delimiter-patterns', $aDelimiterPatterns);
+		}
+		
 		if ($sBodyFormat == 'text/html')
 		{
 			// In HTML the "quoted" text is supposed to be inside "<blockquote....>.....</blockquote>"
