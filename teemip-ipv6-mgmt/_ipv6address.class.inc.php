@@ -91,19 +91,34 @@ class _IPv6Address extends IPAddress
 		}
 	}
 	
-	/**
-	 * Displays the tabs listing the parent objects
-	 */
-	function DisplayBareRelations(WebPage $oPage, $bEditMode = false)
+	/*
+	 * Compute attributes before writing object 
+	 */     
+	public function ComputeValues()
 	{
-		$sOrgId = $this->Get('org_id');
-		if ($sOrgId != null)
+		parent::ComputeValues();
+		
+		// Preset IP to subnet IP if it is not set yet.
+		$iSubnetId = $this->Get('subnet_id');
+		if ($iSubnetId != 0)
 		{
-			// Execute parent function first 
-			parent::DisplayBareRelations($oPage, $bEditMode);
+			$oSubnet = MetaModel::GetObject('IPv6Subnet', $iSubnetId, true /* MustBeFound */);
+			$oIp = $this->Get('ip'); 
+			if (!$oSubnet->DoCheckIpInSubnet($oIp))
+			{
+				$oSubnetMask = new ormIPv6(IPV6_SUBNET_MASK);
+				$oNotSubnetMask = $oSubnetMask->BitWiseNot();
+				$oIp = $oIp->BitWiseAnd($oNotSubnetMask);
+				$oZero = new ormIPv6('::');
+				if ($oIp->IsEqual($oZero))
+				{
+					$oSubnetIp = $this->Get('subnet_ip');
+					$this->Set('ip', $oSubnetIp);
+				}
+			}
 		}
 	}
-	
+
 	/**
 	 * Check validity of new IP attributes before creation
 	 */
@@ -144,9 +159,18 @@ class _IPv6Address extends IPAddress
 					return;
 				}
 			}
-			// If not, make sure IP belongs to subnet
+			// If not:
+			// - Look for IP Range that IP may belong to
+			// - Make sure IP belongs to subnet
 			else
 			{
+				$oIpRangeSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv6Range AS r WHERE r.firstip <= :ip AND :ip <= r.lastip AND r.org_id = $sOrgId",  array('ip' => $sIp)));
+				if ($oIpRangeSet->Count() != 0)
+				{
+					$oIpRange = $oIpRangeSet->Fetch();
+					$this->Set('range_id', $oIpRange->GetKey());
+				}
+
 				$iSubnetId = $this->Get('subnet_id');
 				if ($iSubnetId != 0)
 				{
@@ -174,7 +198,7 @@ class _IPv6Address extends IPAddress
 			$sPingBeforeAssign = utils::ReadPostedParam('attr_ping_before_assign', '');
 			if (empty($sPingBeforeAssign))
 			{
-				$sPingBeforeAssign = GetFromGlobalIPConfig('ping_before_assign', $sOrgId);
+				$sPingBeforeAssign = IPConfig::GetFromGlobalIPConfig('ping_before_assign', $sOrgId);
 			}
 			if ($sPingBeforeAssign =='ping_yes')
 			{
@@ -198,7 +222,7 @@ class _IPv6Address extends IPAddress
 	 */
 	public function GetAttributeFlags($sAttCode, &$aReasons = array(), $sTargetState = '')
 	{
-		if ((!$this->IsNew()) && ($sAttCode == 'ip'))
+		if ((!$this->IsNew()) && ($sAttCode == 'ip' || $sAttCode == 'subnet_id' || $sAttCode == 'range_id'))
 		{
 			return OPT_ATT_READONLY;
 		}

@@ -1,22 +1,24 @@
 <?php
+
+
 SetupWebPage::AddModule(
 	__FILE__,
-	'teemip-config-mgmt-adaptor/2.1.0',
+	'teemip-endusers-devices-adaptor/2.1.0',
 	array(
 		// Identification
 		//
-		'label' => 'TeemIp adaptor for iTop Config Mgmt',
+		'label' => 'TeemIp adaptor for iTop End-user Devices Management',
 		'category' => 'business',
 
 		// Setup
 		//
 		'dependencies' => array(
-			'itop-config-mgmt/2.0.0',
-			'teemip-ip-mgmt/2.0.0'
+			'itop-endusers-devices/2.0.0',
+			'teemip-ip-mgmt/2.0.0',
 		),
 		'mandatory' => false,
 		'visible' => true, // To prevent auto-install but shall not be listed in the install wizard
- 		'auto_select' => 'SetupInfo::ModuleIsSelected("teemip-ip-mgmt") && SetupInfo::ModuleIsSelected("itop-config-mgmt")',
+ 		'auto_select' => 'SetupInfo::ModuleIsSelected("teemip-ip-mgmt") && SetupInfo::ModuleIsSelected("itop-endusers-devices")',
 
 		// Components
 		//

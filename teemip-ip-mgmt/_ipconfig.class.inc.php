@@ -105,4 +105,37 @@ class _IPConfig extends cmdbAbstractObject
 		}
 		return parent::GetAttributeFlags($sAttCode, $aReasons, $sTargetState);
 	}
+	
+	/**
+	 * Retrieve global confif for give organization
+	 */
+	
+	public static function GetGlobalIPConfig($sOrgId)
+	{
+		// Create Global Config of $sOrgId if it doesn't exist
+		// Create basic IP usages at the same time
+		$oIpConfig = MetaModel::GetObjectFromOQL("SELECT IPConfig AS conf WHERE conf.org_id = $sOrgId", null, false);
+		if ($oIpConfig == null)
+		{
+			$oIpConfig = MetaModel::NewObject('IPConfig');
+			$oIpConfig->Set('org_id', $sOrgId);
+			$oIpConfig->DBInsert();
+	
+			IPUsage::CreateBasicIpUsages($sOrgId);
+		}
+		return ($oIpConfig);
+	}
+	
+	public static function GetFromGlobalIPConfig($sParameter, $sOrgId)
+	{
+		// Reads $sParameter from Global Config
+		if ($sOrgId != null)
+		{
+			$oIpConfig = IPConfig::GetGlobalIPConfig($sOrgId);
+			return ($oIpConfig->Get($sParameter));
+		}
+		return null;
+	}
+	
+	
 }

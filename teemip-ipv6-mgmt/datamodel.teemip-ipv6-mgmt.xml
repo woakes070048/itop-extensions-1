@@ -63,6 +63,9 @@
           <is_null_allowed>false</is_null_allowed>
         </field>
         <field id="lastip" xsi:type="AttributeIPv6Address">
+          <dependencies>
+            <attribute id="firstip"/>
+          </dependencies>
           <sql>lastip</sql>
           <default_value/>
           <is_null_allowed>false</is_null_allowed>
@@ -108,6 +111,9 @@
 		            <item id="requestor_id">
 		              <rank>90</rank>
 		            </item>
+		 		    <item id="allocation_date">
+				      <rank>100</rank>
+				    </item>
                   </items>
                 </item>
               </items>
@@ -156,6 +162,9 @@
             <item id="requestor_id">
               <rank>80</rank>
             </item>
+		    <item id="allocation_date">
+		      <rank>90</rank>
+		    </item>
           </items>
         </search>
         <list>
@@ -181,7 +190,10 @@
             <item id="parent_org_id">
               <rank>70</rank>
             </item>
-          </items>
+ 		    <item id="allocation_date">
+		      <rank>80</rank>
+		    </item>
+         </items>
         </list>
       </presentation>
     </class>
@@ -284,8 +296,11 @@
             <item id="vlans_list">
               <rank>40</rank>
             </item>
-            <item id="col:col1">
+            <item id="vrfs_list">
               <rank>50</rank>
+            </item>
+            <item id="col:col1">
+              <rank>60</rank>
               <items>
                 <item id="fieldset:Class:IPSubnet:baseinfo">
                   <rank>10</rank>
@@ -308,15 +323,18 @@
 		            <item id="requestor_id">
 		              <rank>60</rank>
 		            </item>
-		            <item id="release_date">
+		            <item id="allocation_date">
 		              <rank>70</rank>
+		            </item>
+		            <item id="release_date">
+		              <rank>80</rank>
 		            </item>
                   </items>
                 </item>
               </items>
             </item>
             <item id="col:col2">
-              <rank>60</rank>
+              <rank>70</rank>
               <items>
                 <item id="fieldset:Class:IPSubnet:ipinfo">
                   <rank>10</rank>
@@ -365,8 +383,11 @@
             <item id="requestor_id">
               <rank>80</rank>
             </item>
-            <item id="release_date">
+            <item id="allocation_date">
               <rank>90</rank>
+            </item>
+            <item id="release_date">
+              <rank>100</rank>
             </item>
           </items>
         </search>
@@ -387,8 +408,11 @@
             <item id="org_id">
               <rank>50</rank>
             </item>
-            <item id="release_date">
+            <item id="allocation_date">
               <rank>60</rank>
+            </item>
+            <item id="release_date">
+              <rank>70</rank>
             </item>
           </items>
         </list>
@@ -460,38 +484,61 @@
       <presentation>
         <details>
           <items>
-            <item id="org_id">
+            <item id="contact_list">
               <rank>10</rank>
             </item>
-            <item id="subnet_id">
+            <item id="document_list">
               <rank>20</rank>
             </item>
-            <item id="range">
+            <item id="col:col1">
               <rank>30</rank>
+              <items>
+                <item id="fieldset:Class:IPRange:baseinfo">
+                  <rank>10</rank>
+                  <items>
+		            <item id="org_id">
+		              <rank>10</rank>
+		            </item>
+		            <item id="usage_id">
+		              <rank>20</rank>
+		            </item>
+		            <item id="dhcp">
+		              <rank>30</rank>
+		            </item>
+		            <item id="comment">
+		              <rank>40</rank>
+		            </item>
+		            <item id="requestor_id">
+		              <rank>50</rank>
+		            </item>
+		            <item id="allocation_date">
+		              <rank>60</rank>
+		            </item>
+                  </items>
+                </item>
+              </items>
             </item>
-            <item id="firstip">
+            <item id="col:col2">
               <rank>40</rank>
-            </item>
-            <item id="lastip">
-              <rank>50</rank>
-            </item>
-            <item id="usage_id">
-              <rank>60</rank>
-            </item>
-            <item id="dhcp">
-              <rank>70</rank>
-            </item>
-            <item id="comment">
-              <rank>80</rank>
-            </item>
-            <item id="requestor_id">
-              <rank>90</rank>
-            </item>
-            <item id="contact_list">
-              <rank>100</rank>
-            </item>
-            <item id="document_list">
-              <rank>110</rank>
+              <items>
+                <item id="fieldset:Class:IPRange:ipinfo">
+                  <rank>10</rank>
+                  <items>
+		            <item id="subnet_id">
+		              <rank>10</rank>
+		            </item>
+		            <item id="range">
+		              <rank>20</rank>
+		            </item>
+		            <item id="firstip">
+		              <rank>30</rank>
+		            </item>
+		            <item id="lastip">
+		              <rank>40</rank>
+		            </item>
+                  </items>
+                </item>
+              </items>
             </item>
           </items>
         </details>
@@ -521,6 +568,9 @@
             <item id="requestor_id">
               <rank>80</rank>
             </item>
+            <item id="allocation_date">
+              <rank>90</rank>
+            </item>
           </items>
         </search>
         <list>
@@ -545,6 +595,9 @@
             </item>
             <item id="org_id">
               <rank>70</rank>
+            </item>
+            <item id="allocation_date">
+              <rank>80</rank>
             </item>
           </items>
         </list>
@@ -573,6 +626,7 @@
         <icon>images/ipv6address.png</icon>
         <reconciliation>
           <attributes>
+            <attribute id="fqdn"/>
             <attribute id="ip"/>
             <attribute id="org_id"/>
             <attribute id="org_name"/>
@@ -616,6 +670,9 @@
           <target_attcode>range</target_attcode>
         </field>
         <field id="ip" xsi:type="AttributeIPv6Address">
+          <dependencies>
+            <attribute id="subnet_id"/>
+          </dependencies>
           <sql>ip</sql>
           <default_value/>
           <is_null_allowed>false</is_null_allowed>
@@ -625,11 +682,17 @@
       <presentation>
         <details>
           <items>
-            <item id="ip_list">
+            <item id="contact_list">
               <rank>10</rank>
             </item>
-            <item id="col:col1">
+            <item id="document_list">
               <rank>20</rank>
+            </item>
+            <item id="ip_list">
+              <rank>30</rank>
+            </item>
+            <item id="col:col1">
+              <rank>40</rank>
               <items>
                 <item id="fieldset:Class:IPAddress:baseinfo">
                   <rank>10</rank>
@@ -660,7 +723,7 @@
               </items>
             </item>
             <item id="col:col2">
-              <rank>30</rank>
+              <rank>50</rank>
               <items>
                 <item id="fieldset:Class:IPAddress:dnsinfo">
                   <rank>10</rank>
@@ -673,6 +736,9 @@
 		            </item>
 		            <item id="fqdn">
 		              <rank>30</rank>
+		            </item>
+		            <item id="aliases">
+		              <rank>40</rank>
 		            </item>
                   </items>
                 </item>
@@ -705,23 +771,26 @@
             <item id="fqdn">
               <rank>30</rank>
             </item>
+		    <item id="aliases">
+		      <rank>40</rank>
+		    </item>
             <item id="usage_id">
-              <rank>40</rank>
-            </item>
-            <item id="subnet_id">
               <rank>50</rank>
             </item>
-            <item id="org_id">
+            <item id="subnet_id">
               <rank>60</rank>
             </item>
-            <item id="requestor_id">
+            <item id="org_id">
               <rank>70</rank>
             </item>
+            <item id="requestor_id">
+              <rank>80</rank>
+            </item>
 		    <item id="allocation_date">
-		      <rank>80</rank>
+		      <rank>90</rank>
 		    </item>
             <item id="release_date">
-              <rank>90</rank>
+              <rank>100</rank>
             </item>
           </items>
         </search>
@@ -736,20 +805,23 @@
             <item id="fqdn">
               <rank>30</rank>
             </item>
+		    <item id="aliases">
+		      <rank>40</rank>
+		    </item>
             <item id="usage_id">
-              <rank>40</rank>
-            </item>
-            <item id="subnet_id">
               <rank>50</rank>
             </item>
-            <item id="org_id">
+            <item id="subnet_id">
               <rank>60</rank>
             </item>
+            <item id="org_id">
+              <rank>70</rank>
+            </item>
 		    <item id="allocation_date">
-		      <rank>70</rank>
+		      <rank>80</rank>
 		    </item>
             <item id="release_date">
-              <rank>80</rank>
+              <rank>90</rank>
             </item>
           </items>
         </list>

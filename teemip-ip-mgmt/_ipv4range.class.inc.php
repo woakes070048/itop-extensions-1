@@ -91,7 +91,7 @@ class _IPv4Range extends IPRange
 						
 		// List exported parameters
 		$sHtml = "Registered,Id";
-		$aParam = array('org_name', 'ip', 'status', 'fqdn', 'usage_name', 'ipinterface_name', 'comment', 'requestor_name', 'release_date');
+		$aParam = array('org_name', 'ip', 'status', 'fqdn', 'usage_name', 'comment', 'requestor_name', 'release_date');
 		foreach($aParam as $sAttCode)
 		{
 				$sHtml .= ','.MetaModel::GetLabel('IPv4Address', $sAttCode);
@@ -122,7 +122,6 @@ class _IPv4Range extends IPRange
 				$sHtml .= $oIpRegistered->Get('status').",";
 				$sHtml .= $oIpRegistered->Get('fqdn').",";
 				$sHtml .= $oIpRegistered->Get('usage_name').",";
-				$sHtml .= $oIpRegistered->Get('ipinterface_name').",";
 				$sHtml .= $oIpRegistered->Get('comment').",";
 				$sHtml .= $oIpRegistered->Get('requestor_name').",";
 				$sHtml .= $oIpRegistered->Get('release_date')."\n";
@@ -522,6 +521,62 @@ EOF
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Perform specific tasks related to IPv4 range creation:
+	 */	 
+	protected function AfterInsert()
+	{
+		parent::AfterInsert();
+		
+		$iOrgId = $this->Get('org_id');
+		$iId = $this->GetKey();
+		$sFirstIp = $this->Get('firstip');
+		$sLastIp = $this->Get('lastip');
+				
+		// Make sure all IPs belonging to range are attached to it
+		$oIpRegisteredSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv4Address AS i WHERE INET_ATON('$sFirstIp') <= INET_ATON(i.ip) AND INET_ATON(i.ip) <= INET_ATON('$sLastIp') AND i.org_id = $iOrgId"));
+		while ($oIpRegistered = $oIpRegisteredSet->Fetch())
+		{
+			if ($oIpRegistered->Get('range_id') != $iId)
+			{
+				$oIpRegistered->Set('range_id', $iId);
+				$oIpRegistered->DBUpdate();	
+			}
+		}
+	}
+	
+	/**
+	 * Perform specific tasks related to IPv4 range update:
+	 */	 
+	protected function AfterUpdate()
+	{
+		parent::AfterUpdate();
+		
+		$iOrgId = $this->Get('org_id');
+		$iId = $this->GetKey();
+		$sFirstIp = $this->Get('firstip');
+		$sLastIp = $this->Get('lastip');
+				
+		// Make sure all IPs belonging to range are attached to it
+		$oIpRegisteredSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv4Address AS i WHERE INET_ATON('$sFirstIp') <= INET_ATON(i.ip) AND INET_ATON(i.ip) <= INET_ATON('$sLastIp') AND i.org_id = $iOrgId"));
+		while ($oIpRegistered = $oIpRegisteredSet->Fetch())
+		{
+			if ($oIpRegistered->Get('range_id') != $iId)
+			{
+				$oIpRegistered->Set('range_id', $iId);
+				$oIpRegistered->DBUpdate();	
+			}
+		}
+
+		// Make sure all IPs ouside of range are NOT attached to it
+		$oIpRegisteredSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv4Address AS i WHERE i.range_id = $iId AND (INET_ATON(i.ip) < INET_ATON('$sFirstIp') OR INET_ATON('$sLastIp') < INET_ATON(i.ip))"));
+		while ($oIpRegistered = $oIpRegisteredSet->Fetch())
+		{
+			$oIpRegistered->Set('range_id', 0);
+			$oIpRegistered->DBUpdate();
+		}		
 	}
 	
 	/**

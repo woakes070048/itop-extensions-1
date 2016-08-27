@@ -210,7 +210,7 @@ class _IPv6Subnet extends IPSubnet
 						
 		// List exported parameters
 		$sHtml = "Registered,Id";
-		$aParam = array('org_name', 'ip', 'status', 'fqdn', 'usage_name', 'ipinterface_name', 'comment', 'requestor_name', 'release_date');
+		$aParam = array('org_name', 'ip', 'status', 'fqdn', 'usage_name', 'comment', 'requestor_name', 'release_date');
 		foreach($aParam as $sAttCode)
 		{
 			$sHtml .= ','.MetaModel::GetLabel('IPv6Address', $sAttCode);
@@ -239,7 +239,6 @@ class _IPv6Subnet extends IPSubnet
 				$sHtml .= $oIpRegistered->Get('status').",";
 				$sHtml .= $oIpRegistered->Get('fqdn').",";
 				$sHtml .= $oIpRegistered->Get('usage_name').",";
-				$sHtml .= $oIpRegistered->Get('ipinterface_name').",";
 				$sHtml .= $oIpRegistered->Get('comment').",";
 				$sHtml .= $oIpRegistered->Get('requestor_name').",";
 				$sHtml .= $oIpRegistered->Get('release_date').",";
@@ -339,6 +338,95 @@ class _IPv6Subnet extends IPSubnet
 		}
 	}
 	
+	/**
+	 * Check if space can be searched
+	 */
+	function DoCheckToDisplayAvailableSpace($aParam)
+	{
+		$iRangeSize = $aParam['rangesize'];
+		
+		// Get list of registered IPs & ranges in subnet
+		$iSubnetSize = $this->GetSize();
+		if ($iRangeSize >= $iSubnetSize)
+		{
+			// Required range size is to big, exit
+			return ('RangeTooBig');
+		}
+		return '';
+	}
+
+	/**
+	 * Displays available space
+	 */
+	function DoDisplayAvailableSpace(WebPage $oP, $iChangeId, $aParam)
+	{
+		$iId = $this->GetKey();
+		$sOrgId = $this->Get('org_id');
+		$iRangeSize = $aParam['rangesize'];
+		$iMaxOffer = $aParam['maxoffer'];
+		
+		// Get list of registered IPs & ranges in subnet
+		$iSubnetSize = $this->GetSize();
+		if ($iRangeSize >= $iSubnetSize)
+		{
+			// Required range size is to big, exit
+			// This should have been checked before
+			$oP->add(Dict::Format('UI:IPManagement:Action:DoFindSpace:IPv6Subnet:RangeTooBig')."<br><br>");
+		}
+		else
+		{
+			// Get list of free space in subnet
+			$aFreeSpace = $this->GetFreeSpace($iRangeSize, $iMaxOffer);
+			
+			// Check user rights
+			$UserHasRightsToCreate = (UserRights::IsActionAllowed('IPv6Range', UR_ACTION_MODIFY) == UR_ALLOWED_YES) ? true : false;
+	
+			// Display Summary of parameters
+			$oP->add("<ul>\n");
+			$oP->add("<li>"."&nbsp;".Dict::Format('UI:IPManagement:Action:DoFindSpace:IPv6Subnet:Summary', $iMaxOffer, $iRangeSize)."<ul>\n");
+			
+			// Display possible choices as list
+			$iSizeFreeArray = sizeof ($aFreeSpace);
+			if ($iSizeFreeArray != 0)
+			{
+				$i = 0;
+				$iVIdCounter = 1;
+				do
+				{
+					$oRangeFirstIp = $aFreeSpace[$i]['firstip'];
+					$sRangeFirstIp = $oRangeFirstIp->ToString();
+					$oRangeLastIp = $aFreeSpace[$i]['lastip'];
+					$sRangeLastIp = $oRangeLastIp->ToString();
+					$oP->add("<li>".$sRangeFirstIp." - ".$sRangeLastIp."\n");
+					
+					// If user has rights to create range
+					// Display range with icon to create it
+					if  ($UserHasRightsToCreate)
+					{
+						$iVId = $iVIdCounter++;
+						$sHTMLValue = "<ul><li><div><span id=\"v_{$iVId}\">";
+						$sHTMLValue .= "<img style=\"border:0;vertical-align:middle;cursor:pointer;\" src=\"".utils::GetAbsoluteUrlModulesRoot()."/teemip-ip-mgmt/images/ipmini-add-xs.png\" onClick=\"oIpWidget_{$iVId}.DisplayCreationForm();\"/>&nbsp;";
+						$sHTMLValue .= "&nbsp;".Dict::Format('UI:IPManagement:Action:DoFindSpace:IPv6Subnet:CreateAsRange')."&nbsp;&nbsp;";
+						$sHTMLValue .= "</span></div></li>\n";
+						$oP->add($sHTMLValue);
+						$oP->add_ready_script(
+<<<EOF
+						oIpWidget_{$iVId} = new IpWidget($iVId, 'IPv6Range', $iChangeId, {'org_id': '$sOrgId', 'subnet_id': '$iId', 'firstip': '$oRangeFirstIp', 'lastip': '$oRangeLastIp'});
+EOF
+						);
+						$oP->add("</ul></li>\n");
+					}
+					else
+					{
+						$oP->add("</li>\n");
+					} 
+				}
+			while (++$i < $iSizeFreeArray);
+		}
+		$oP->add("</ul></li></ul>\n");
+		}
+	} 
+
 	/**
 	 * Check if IPs can be listed
 	 */
@@ -635,11 +723,15 @@ EOF
 					$oP->add("<b>".Dict::S('UI:IPManagement:Action:CsvExportIps:IPv6Subnet:Subtitle_ListRange')."</b>\n");
 				}
 				
+				// Preset subnet bits of IP
+				$oSubnetIp = $this->Get('ip');
+				$sSubnetIp = substr($oSubnetIp->ToString(), 0, 20);
+				
 				// New first IP
 				$sAttCode = 'firstip';
 				$sInputId = $iFormId.'_'.'firstip';
 				$oAttDef = MetaModel::GetAttributeDef('IPv6Range', 'firstip');
-				$sDefault = (array_key_exists('firstip', $aDefault)) ? $aDefault['firstip'] : '';
+				$sDefault = (array_key_exists('firstip', $aDefault)) ? $aDefault['firstip'] : $sSubnetIp;
 				$sHTMLValue = cmdbAbstractObject::GetFormElementForField($oP, 'IPv6Range', $sAttCode, $oAttDef, $sDefault, '', $sInputId, '', '', '');
 				$aDetails[] = array('label' => '<span title="">'.$sLabelOfAction1.'</span>', 'value' => $sHTMLValue);
 				
@@ -647,7 +739,7 @@ EOF
 				$sAttCode = 'lastip';
 				$sInputId = $iFormId.'_'.'lastip';
 				$oAttDef = MetaModel::GetAttributeDef('IPv6Range', 'lastip');
-				$sDefault = (array_key_exists('lastip', $aDefault)) ? $aDefault['lastip'] : '';
+				$sDefault = (array_key_exists('lastip', $aDefault)) ? $aDefault['lastip'] : $sSubnetIp;
 				$sHTMLValue = cmdbAbstractObject::GetFormElementForField($oP, 'IPv6Range', $sAttCode, $oAttDef, $sDefault, '', $sInputId, '', '', '');
 				$aDetails[] = array('label' => '<span title="">'.$sLabelOfAction2.'</span>', 'value' => $sHTMLValue);
 				
@@ -703,77 +795,6 @@ EOF
 	}
 
 	/**
-	 * Displays available space
-	 */
-	function DisplayAvailableSpace(WebPage $oP, $iChangeId, $aParam)
-	{
-		$iId = $this->GetKey();
-		$sOrgId = $this->Get('org_id');
-		$iRangeSize = $aParam['rangesize'];
-		$iMaxOffer = $aParam['maxoffer'];
-		
-		// Get list of registered IPs & ranges in subnet
-		$iSubnetSize = $this->GetSize();
-		if ($iRangeSize >= $iSubnetSize)
-		{
-			// Required range size is to big, exit
-			$oP->add(Dict::Format('UI:IPManagement:Action:DoFindSpace:IPv6Subnet:RangeTooBig')."<br><br>");
-		}
-		else
-		{
-			// Get list of free space in subnet
-			$aFreeSpace = $this->GetFreeSpace($iRangeSize, $iMaxOffer);
-			
-			// Check user rights
-			$UserHasRightsToCreate = (UserRights::IsActionAllowed('IPv6Range', UR_ACTION_MODIFY) == UR_ALLOWED_YES) ? true : false;
-	
-			// Display Summary of parameters
-			$oP->add("<ul>\n");
-			$oP->add("<li>"."&nbsp;".Dict::Format('UI:IPManagement:Action:DoFindSpace:IPv6Subnet:Summary', $iMaxOffer, $iRangeSize)."<ul>\n");
-			
-			// Display possible choices as list
-			$iSizeFreeArray = sizeof ($aFreeSpace);
-			if ($iSizeFreeArray != 0)
-			{
-				$i = 0;
-				$iVIdCounter = 1;
-				do
-				{
-					$oRangeFirstIp = $aFreeSpace[$i]['firstip'];
-					$sRangeFirstIp = $oRangeFirstIp->ToString();
-					$oRangeLastIp = $aFreeSpace[$i]['lastip'];
-					$sRangeLastIp = $oRangeLastIp->ToString();
-					$oP->add("<li>".$sRangeFirstIp." - ".$sRangeLastIp."\n");
-					
-					// If user has rights to create range
-					// Display range with icon to create it
-					if  ($UserHasRightsToCreate)
-					{
-						$iVId = $iVIdCounter++;
-						$sHTMLValue = "<ul><li><div><span id=\"v_{$iVId}\">";
-						$sHTMLValue .= "<img style=\"border:0;vertical-align:middle;cursor:pointer;\" src=\"".utils::GetAbsoluteUrlModulesRoot()."/teemip-ip-mgmt/images/ipmini-add-xs.png\" onClick=\"oIpWidget_{$iVId}.DisplayCreationForm();\"/>&nbsp;";
-						$sHTMLValue .= "&nbsp;".Dict::Format('UI:IPManagement:Action:DoFindSpace:IPv6Subnet:CreateAsRange')."&nbsp;&nbsp;";
-						$sHTMLValue .= "</span></div></li>\n";
-						$oP->add($sHTMLValue);
-						$oP->add_ready_script(
-<<<EOF
-						oIpWidget_{$iVId} = new IpWidget($iVId, 'IPv6Range', $iChangeId, {'org_id': '$sOrgId', 'subnet_id': '$iId', 'firstip': '$oRangeFirstIp', 'lastip': '$oRangeLastIp'});
-EOF
-						);
-						$oP->add("</ul></li>\n");
-					}
-					else
-					{
-						$oP->add("</li>\n");
-					} 
-				}
-			while (++$i < $iSizeFreeArray);
-		}
-		$oP->add("</ul></li></ul>\n");
-		}
-	} 
-
-	/**
 	 * Displays result of IPv6 calculator
 	 */
 	function DisplayCalculatorOutput(WebPage $oP, $aParam)
@@ -809,12 +830,36 @@ EOF
 			$iUsableHosts = 0;
 		}
 		
+		$oIp = new ormIPv6('::');
+		if ($oSubnetIp->IsEqual($oIp))
+		{
+			$sPreviousSubnetIp = Dict::Format('UI:IPManagement:Action:DoCalculator:IPv6Subnet:PreviousSubnet:NA');
+		}
+		else
+		{
+			$oPreviousSubnetIp = $oSubnetIp->GetPreviousIp();
+			$oPreviousSubnetIp = $oPreviousSubnetIp->BitwiseAnd($oMask);
+			$sPreviousSubnetIp = $oPreviousSubnetIp->GetAsCompressed();
+		}
+		
+		$oIp = new ormIPv6('FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF');
+		if ($oLastIp->IsEqual($oIp))
+		{
+			$sNextSubnetIp = Dict::Format('UI:IPManagement:Action:DoCalculator:IPv6Subnet:NextSubnet:NA');
+		}
+		else
+		{
+			$oNextSubnetIp = $oLastIp->GetNextIp();
+			$sNextSubnetIp = $oNextSubnetIp->GetAsCompressed();
+		}
+		
 		$oP->add('<table><tr><td style="vertical-align:top">');
 		// IP address - Compressed format
 		$oP->add('&nbsp;&nbsp;</td><td>'.Dict::Format('UI:IPManagement:Action:DoCalculator:IPv6Subnet:CompressedIP').":</td><td>$sIpComp</td></tr>");
 		
 		// IP address - Canonical format
 		$oP->add('<tr><td>&nbsp;&nbsp;</td><td>'.Dict::Format('UI:IPManagement:Action:DoCalculator:IPv6Subnet:CanonicalIP').":</td><td>$sIpCan</td></tr>");
+		$oP->add('<tr><td height=10></td></tr>');
 		
 		// Network IP
 		$oP->add('<tr><td>&nbsp;&nbsp;</td><td>'.Dict::Format('UI:IPManagement:Action:DoCalculator:IPv6Subnet:NetworkIP').":</td><td><b>$sSubnetIp</b></td></tr>");
@@ -824,13 +869,21 @@ EOF
 		
 		// Prefix mask
 		$oP->add('<tr><td>&nbsp;&nbsp;</td><td>'.Dict::Format('UI:IPManagement:Action:DoCalculator:IPv6Subnet:PrefixMask').":</td><td>$sMask</td></tr>");
+		$oP->add('<tr><td height=10></td></tr>');
 		
 		// Last IP
 		$oP->add('<tr><td>&nbsp;&nbsp;</td><td>'.Dict::Format('UI:IPManagement:Action:DoCalculator:IPv6Subnet:LastIP').":</td><td><b>$sLastIp</b></td></tr>");
 		
 		// Number of IPs
 		$oP->add('<tr><td>&nbsp;&nbsp;</td><td>'.Dict::Format('UI:IPManagement:Action:DoCalculator:IPv6Subnet:IPNumber').":</td><td>$iIpNumber</td></tr>");
+		$oP->add('<tr><td height=10></td></tr>');
 		
+		// Previous network
+		$oP->add('<tr><td>&nbsp;&nbsp;</td><td>'.Dict::Format('UI:IPManagement:Action:DoCalculator:IPv6Subnet:PreviousSubnet').":</td><td>$sPreviousSubnetIp</td></tr>");
+		
+		// Next network
+		$oP->add('<tr><td>&nbsp;&nbsp;</td><td>'.Dict::Format('UI:IPManagement:Action:DoCalculator:IPv6Subnet:NextSubnet').":</td><td>$sNextSubnetIp</td></tr>");
+				
 		$oP->add('</table>');
 			
 	}
@@ -941,7 +994,7 @@ EOF
 
 		// Set Gateway IP
 		$sOrgId = $this->Get('org_id');
-		$sGatewayIPFormat = GetFromGlobalIPConfig('ipv6_gateway_ip_format', $sOrgId);
+		$sGatewayIPFormat = IPConfig::GetFromGlobalIPConfig('ipv6_gateway_ip_format', $sOrgId);
 		switch ($sGatewayIPFormat)
 		{
 			case 'subnetip_plus_1':
@@ -1050,7 +1103,7 @@ EOF
 		}
 		
 		// If allocation of Gateway Ip is free, make sure it is contained in subnet
-		$sGatewayIPFormat = GetFromGlobalIPConfig('ipv6_gateway_ip_format', $sOrgId);
+		$sGatewayIPFormat = IPConfig::GetFromGlobalIPConfig('ipv6_gateway_ip_format', $sOrgId);
 		if ($sGatewayIPFormat == 'free_setup')
 		{
 			$oGatewayIp = $this->Get('gatewayip');
@@ -1081,12 +1134,12 @@ EOF
 		$sReserveSubnetIPs = utils::ReadPostedParam('attr_reserve_subnet_IPs', '');
 		if (empty($sReserveSubnetIPs))
 		{
-			$sReserveSubnetIPs = GetFromGlobalIPConfig('reserve_subnet_IPs', $sOrgId);
+			$sReserveSubnetIPs = IPConfig::GetFromGlobalIPConfig('reserve_subnet_IPs', $sOrgId);
 		}
 		if ($sReserveSubnetIPs == 'reserve_yes')
 		{
 			// Create or update subnet IP
-			$sUsageNetworkIpId = GetIpUsageId($sOrgId, NETWORK_IP_CODE);
+			$sUsageNetworkIpId = IPUsage::GetIpUsageId($sOrgId, NETWORK_IP_CODE);
 			$oIp = MetaModel::GetObjectFromOQL("SELECT IPv6Address AS i WHERE i.ip = '$sSubnetIp' AND i.org_id = $sOrgId", null, false);
 			if (is_null($oIp))
 			{
@@ -1110,7 +1163,7 @@ EOF
 			}
 			
 			// Create or update gateway IP
-			$sUsageGatewayIpId = GetIpUsageId($sOrgId, GATEWAY_IP_CODE);
+			$sUsageGatewayIpId = IPUsage::GetIpUsageId($sOrgId, GATEWAY_IP_CODE);
 			$oIp = MetaModel::GetObjectFromOQL("SELECT IPv6Address AS i WHERE i.ip = '$sGatewayIp' AND i.org_id = $sOrgId", null, false);
 			if (is_null($oIp))
 			{
@@ -1160,12 +1213,12 @@ EOF
 		$oGatewayIp = $this->Get('gatewayip');
 		$sGatewayIp = $oGatewayIp->ToString();
 		$sLastIp = $this->Get('lastip')->ToString();
-		$sReserveSubnetIPs = GetFromGlobalIPConfig('reserve_subnet_IPs', $sOrgId);
+		$sReserveSubnetIPs = IPConfig::GetFromGlobalIPConfig('reserve_subnet_IPs', $sOrgId);
 		
 		if ($sReserveSubnetIPs == 'reserve_yes')
 		{
 			// Create or update subnet IP
-			$sUsageNetworkIpId = GetIpUsageId($sOrgId, NETWORK_IP_CODE);
+			$sUsageNetworkIpId = IPUsage::GetIpUsageId($sOrgId, NETWORK_IP_CODE);
 			$oIp = MetaModel::GetObjectFromOQL("SELECT IPv6Address AS i WHERE i.ip = '$sSubnetIp' AND i.org_id = $sOrgId", null, false);
 			if (is_null($oIp))
 			{
@@ -1189,7 +1242,7 @@ EOF
 			}
 			
 			// Create or update gateway IP
-			$sUsageGatewayIpId = GetIpUsageId($sOrgId, GATEWAY_IP_CODE);
+			$sUsageGatewayIpId = IPUsage::GetIpUsageId($sOrgId, GATEWAY_IP_CODE);
 			$oIp = MetaModel::GetObjectFromOQL("SELECT IPv6Address AS i WHERE i.ip = '$sGatewayIp' AND i.org_id = $sOrgId", null, false);
 			if (is_null($oIp))
 			{
@@ -1255,9 +1308,18 @@ EOF
 	 */
 	public function GetAttributeFlags($sAttCode, &$aReasons = array(), $sTargetState = '')
 	{
-		if ((!$this->IsNew()) && (($sAttCode == 'org_id') || ($sAttCode == 'block_id') || ($sAttCode == 'ip') || ($sAttCode == 'mask') || ($sAttCode == 'gatewayip') || ($sAttCode == 'lastip') || ($sAttCode == 'ip_occupancy') || ($sAttCode == 'range_occupancy')))
+		if ((!$this->IsNew()) && (($sAttCode == 'org_id') || ($sAttCode == 'block_id') || ($sAttCode == 'ip') || ($sAttCode == 'mask') || ($sAttCode == 'lastip') || ($sAttCode == 'ip_occupancy') || ($sAttCode == 'range_occupancy')))
 		{
 			return OPT_ATT_READONLY;
+		}
+		if ((!$this->IsNew()) && ($sAttCode == 'gatewayip'))
+		{
+			$sOrgId = $this->Get('org_id');
+			$sGatewayIPFormat = IPConfig::GetFromGlobalIPConfig('ipv6_gateway_ip_format', $sOrgId);
+			if ($sGatewayIPFormat != 'free_setup')
+			{
+				return OPT_ATT_READONLY;
+			}
 		}
 		return parent::GetAttributeFlags($sAttCode, $aReasons, $sTargetState);
 	}

@@ -28,6 +28,15 @@
 //
 
 //
+// TeemIp specific attributes
+//
+
+Dict::Add('DE DE', 'German', 'Deutsch', array(
+	'Core:AttributeIPv6Address' => 'IPv6 Adresse',
+	'Core:AttributeIPv6Address+' => '',
+));
+
+//
 // Class: IPv6Block
 //
 
@@ -212,7 +221,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'UI:IPManagement:Action:Shrink:IPv6Block+' => '',
 	'UI:IPManagement:Action:Shrink:IPv6Block:Summary' => 'Zusammenfassung',
 	'UI:IPManagement:Action:Shrink:IPv6Block:Summary+' => '',
-	'UI:IPManagement:Action:Shrink:IPv6Block:PageTitle_Object_Class' => 'TeemIp - %1$s - %2$s verkleinern',
+	'UI:IPManagement:Action:Shrink:IPv6Block:PageTitle_Object_Class' => '%1$s - %2$s verkleinern',
 	'UI:IPManagement:Action:Shrink:IPv6Block:Title_Class_Object' => 'Shrink %1$s: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:Shrink:IPv6Block:NewFirstIP' => 'Neue erste IP des Blocks:',
 	'UI:IPManagement:Action:Shrink:IPv6Block:NewLastIP' => 'Neue Letzte IP des Blocks:',            
@@ -226,7 +235,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'UI:IPManagement:Action:Split:IPv6Block+' => '',
 	'UI:IPManagement:Action:Split:IPv6Block:Summary' => 'Zusammenfassung',
 	'UI:IPManagement:Action:Split:IPv6Block:Summary+' => '',
-	'UI:IPManagement:Action:Split:IPv6Block:PageTitle_Object_Class' => 'TeemIp - %1$s - %2$s split',
+	'UI:IPManagement:Action:Split:IPv6Block:PageTitle_Object_Class' => '%1$s - %2$s split',
 	'UI:IPManagement:Action:Split:IPv6Block:Title_Class_Object' => '%1$s teilen: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:Split:IPv6Block:At' => 'Erste IP des neuen Subnetz Blocks:',
 	'UI:IPManagement:Action:Split:IPv6Block:NameNewBlock' => 'Name des neuen Subnetz Blocks:',
@@ -240,7 +249,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'UI:IPManagement:Action:Expand:IPv6Block+' => '',
 	'UI:IPManagement:Action:Expand:IPv6Block:Summary' => 'Zusammenfassung',
 	'UI:IPManagement:Action:Expand:IPv6Block:Summary+' => '',
-	'UI:IPManagement:Action:Expand:IPv6Block:PageTitle_Object_Class' => 'TeemIp - %1$s - %2$s vergrößern',
+	'UI:IPManagement:Action:Expand:IPv6Block:PageTitle_Object_Class' => '%1$s - %2$s vergrößern',
 	'UI:IPManagement:Action:Expand:IPv6Block:Title_Class_Object' => '%1$s vergrößern: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:Expand:IPv6Block:NewFirstIP' => 'Neue erste IP des Blocks:',
 	'UI:IPManagement:Action:Expand:IPv6Block:NewLastIP' => 'Neue letzte IP des Blocks:',
@@ -251,19 +260,19 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 
 	// List space action on subnet blocks 
 	'UI:IPManagement:Action:ListSpace:IPv6Block' => 'IP Raum auflisten',                                               
-	'UI:IPManagement:Action:ListSpace:IPv6Block:PageTitle_Object_Class' => 'TeemIp - %1$s - IP Raum',
+	'UI:IPManagement:Action:ListSpace:IPv6Block:PageTitle_Object_Class' => '%1$s - IP Raum',
 	'UI:IPManagement:Action:ListSpace:IPv6Block:Title_Class_Object' => 'IP Raum in %1$s: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:ListSpace:IPv6Block:FreeSpace' => 'Frei [%1$s - %2$s] - %3$s IPs - %4$.2f %%',
 	
 	// Find Space action on subnet blocks
 	'UI:IPManagement:Action:FindSpace:IPv6Block' => 'IP Raum finden',
-	'UI:IPManagement:Action:FindSpace:IPv6Block:PageTitle_Object_Class' => 'TeemIp - %1$s - IP Raum finden',
+	'UI:IPManagement:Action:FindSpace:IPv6Block:PageTitle_Object_Class' => '%1$s - IP Raum finden',
 	'UI:IPManagement:Action:FindSpace:IPv6Block:Title_Class_Object' => 'IP Raum suchen in %1$s: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:FindSpace:IPv6Block:SizeOfSpace' => 'Größe des benötigten IP Raums:',
 	'UI:IPManagement:Action:FindSpace:IPv6Block:MaxNumberOfOffers' => 'Maximal mögliche Anzahl :',
 	
 	// Do find Space action on subnet blocks
-	'UI:IPManagement:Action:DoFindSpace:IPv6Block:PageTitle_Object_Class' => 'TeemIp - %1$s - IP Raum finden',
+	'UI:IPManagement:Action:DoFindSpace:IPv6Block:PageTitle_Object_Class' => '%1$s - IP Raum finden',
 	'UI:IPManagement:Action:DoFindSpace:IPv6Block:Title_Class_Object' => 'IP Raum in den %1$s: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:DoFindSpace:IPv6Block:Summary' => '%1$s ersten /%2$s im Block',
 	'UI:IPManagement:Action:DoFindSpace:IPv6Block:CreateAsBlock' => 'Als Child Block erzeugen',
@@ -271,7 +280,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 
 	// Delegate action on subnet blocks
 	'UI:IPManagement:Action:Delegate:IPv6Block' => 'Delegieren',
-	'UI:IPManagement:Action:Delegate:IPv6Block:PageTitle_Object_Class' => 'TeemIp - %1$s - Delegieren',
+	'UI:IPManagement:Action:Delegate:IPv6Block:PageTitle_Object_Class' => '%1$s - Delegieren',
 	'UI:IPManagement:Action:Delegate:IPv6Block:Title_Class_Object' => '%1$s <span class="hilite">%2$s</span> an Child Organisation delegieren',
 	'UI:IPManagement:Action:Delegate:IPv6Block:ChildBlock' => 'Child Organisation, an die der Block delegiert werden soll:',
 	'UI:IPManagement:Action:Delegate:IPv6Block:NoChildOrg' => 'Die Organisation des Blocks hat keine Children, daher kann der Block nicht delegiert werden!',
@@ -303,14 +312,14 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	
 	// Find space action on subnets 
 	'UI:IPManagement:Action:FindSpace:IPv6Subnet' => 'IP Raum finden',
-	'UI:IPManagement:Action:FindSpace:IPv6Subnet:PageTitle_Object_Class' => 'TeemIp - %1$s - IP Raum finden',
+	'UI:IPManagement:Action:FindSpace:IPv6Subnet:PageTitle_Object_Class' => '%1$s - IP Raum finden',
 	'UI:IPManagement:Action:FindSpace:IPv6Subnet:Title_Class_Object' => 'Nach IP Raum suchen in : <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:FindSpace:IPv6Subnet:SizeTooSmall' => 'Subnetz ist zu klein für Raum Suche. Bitte abbrechen.',
 	'UI:IPManagement:Action:FindSpace:IPv6Subnet:SizeOfRange' => 'Größe des gesuchten IP Raums :',
 	'UI:IPManagement:Action:FindSpace:IPv6Subnet:MaxNumberOfOffers' => 'Maximal mögliche Anzahl :',
 	
 	// Do find Space action on subnet
-	'UI:IPManagement:Action:DoFindSpace:IPv6Subnet:PageTitle_Object_Class' => 'TeemIp - %1$s - IP Raum finden',
+	'UI:IPManagement:Action:DoFindSpace:IPv6Subnet:PageTitle_Object_Class' => '%1$s - IP Raum finden',
 	'UI:IPManagement:Action:DoFindSpace:IPv6Subnet:Title_Class_Object' => 'nach IP Raum suchen in %1$s: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:DoFindSpace:IPv6Subnet:Summary' => '%1$s die ersten freien %2$s IPs Räume im Subnetz',
 	'UI:IPManagement:Action:DoFindSpace:IPv6Subnet:RangeTooBig' => 'Die angeforderte Raumgröße passt nicht in das Subnetz. Bitte erneut mit einem kleineren Wert versuchen.',
@@ -318,7 +327,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 
 	// List IPs action on subnets 
 	'UI:IPManagement:Action:ListIps:IPv6Subnet' => 'IPs auflisten und auswählen',                                               
-	'UI:IPManagement:Action:ListIps:IPv6Subnet:PageTitle_Object_Class' => 'TeemIp - %1$s - IPs',
+	'UI:IPManagement:Action:ListIps:IPv6Subnet:PageTitle_Object_Class' => '%1$s - IPs',
 	'UI:IPManagement:Action:ListIps:IPv6Subnet:Title_Class_Object' => 'Liste von IPs in %1$s: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:ListIps:IPv6Subnet:Subtitle_ListRange' => 'Subnetz ist zu groß, um alle IPs aufzulisten. Bitte ein anzuzeigendes Intervall auswählen:',                                               
 	'UI:IPManagement:Action:ListIps:IPv6Subnet:FirstIP' => 'Erste IP in der Liste',                                               
@@ -326,7 +335,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	
 	// Do list IPs action on subnet
 	'UI:IPManagement:Action:DoListIps:IPv6Subnet' => 'IPs auflisten und auswählen',                                               
-	'UI:IPManagement:Action:DoListIps:IPv6Subnet:PageTitle_Object_Class' => 'TeemIp - %1$s - IPs',
+	'UI:IPManagement:Action:DoListIps:IPv6Subnet:PageTitle_Object_Class' => '%1$s - IPs',
 	'UI:IPManagement:Action:DoListIps:IPv6Subnet:Title_Class_Object' => 'Teilliste von IPs in %1$s: <span class="hilite">%2$s</span>',
  	'UI:IPManagement:Action:DoListIps:IPv6Subnet:CannotBeListed' => 'IPs können nicht angezeigt werden in der Liste: %1$s',
 	'UI:IPManagement:Action:DoListIps:IPv6Subnet:FirstIPOutOfSubnet' => 'Erste IP ist außerhalb vom Subnetz!',
@@ -335,7 +344,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 
 	// CSV Export action on subnets
 	'UI:IPManagement:Action:CsvExportIps:IPv6Subnet' => 'CSV Export IPs',
-	'UI:IPManagement:Action:CsvExportIps:IPv6Subnet:PageTitle_Object_Class' => 'TeemIp - %1$s - %2$s CSV Export von IPs',
+	'UI:IPManagement:Action:CsvExportIps:IPv6Subnet:PageTitle_Object_Class' => '%1$s - %2$s CSV Export von IPs',
 	'UI:IPManagement:Action:CsvExportIps:IPv6Subnet:Title_Class_Object' => 'CSV Export IPs von %1$s: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:CsvExportIps:IPv6Subnet:Subtitle_ListRange' => 'Subnetz ist zu groß, um alle IPs auf einmal zu exportieren. Bitte einen Unterbereich auswählen:',                                               
 	'UI:IPManagement:Action:CsvExportIps:IPv6Subnet:FirstIP' => 'Erste IP der Liste',                                               
@@ -343,7 +352,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	
 	// Do CSV export IPs action on subnet
 	'UI:IPManagement:Action:DoCsvExportIps:IPv6Subnet' => 'CSV Export IPs',                                               
-	'UI:IPManagement:Action:DoCsvExportIps:IPv6Subnet:PageTitle_Object_Class' => 'TeemIp - %1$s - %2$s CSV Export von IPs',
+	'UI:IPManagement:Action:DoCsvExportIps:IPv6Subnet:PageTitle_Object_Class' => '%1$s - %2$s CSV Export von IPs',
 	'UI:IPManagement:Action:DoCsvExportIps:IPv6Subnet:Title_Class_Object' => 'Partieller CSV Export von IPs in %1$s: <span class="hilite">%2$s</span>',
  	'UI:IPManagement:Action:DoCsvExportIps:IPv6Subnet:CannotBeListed' => 'IPs können nicht gelistet werden: %1$s',
 	'UI:IPManagement:Action:DoCsvExportIps:IPv6Subnet:FirstIPOutOfSubnet' => 'Die erste IP ist ausserhalb des Subnetzes!',
@@ -352,14 +361,14 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 
 	// Subnet calculator
 	'UI:IPManagement:Action:Calculator:IPv6Subnet' => 'Subnetz Rechner',
-	'UI:IPManagement:Action:Calculator:IPv6Subnet:PageTitle_Object_Class' => 'TeemIp - %2$s Rechner',
+	'UI:IPManagement:Action:Calculator:IPv6Subnet:PageTitle_Object_Class' => '%2$s Rechner',
 	'UI:IPManagement:Action:Calculator:IPv6Subnet:Title_Class_Object' => 'Rechner für %1$s',
 	'UI:IPManagement:Action:Calculator:IPv6Subnet:IP' => 'IP Adresse',
 	'UI:IPManagement:Action:Calculator:IPv6Subnet:Prefix' => 'Prefix',
 
 	// Do Subnet calculator
 	'UI:IPManagement:Action:DoCalculator:IPv6Subnet' => 'Subnetz Rechner',
-	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:PageTitle_Object_Class' => 'TeemIp - %2$s Rechner',
+	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:PageTitle_Object_Class' => '%2$s Rechner',
 	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:Title_Class_Object' => '%1$s - Rechner Ausgabe',
 	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:CompressedIP' => 'IP Address - Komprimiertes Format',
 	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:CanonicalIP' => 'IP Address - Kanonisches Format',
@@ -368,6 +377,10 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:NetworkIP' => 'Netzwerk IP',
 	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:LastIP' => 'Letzte IP',
 	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:IPNumber' => 'Anzahl von IPs',
+	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:PreviousSubnet' => 'Zurück Subnetz IP',
+	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:PreviousSubnet:NA' => 'Nicht anwendbar',
+	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:NextSubnet' => 'Weiter Subnetz IP',
+	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:NextSubnet:NA' => 'Nicht anwendbar',
 	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:CannotRun' => 'Subnetz Rechner kann nicht arbeiten: %1$s',
 	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:EnterPrefix' => 'Geben Sie ein Prefix ein!',
 	'UI:IPManagement:Action:DoCalculator:IPv6Subnet:WrongPrefix' => 'Prefix ist nicht gültig!',
@@ -381,7 +394,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 
 	// List IPs action on IP Ranges 
 	'UI:IPManagement:Action:ListIps:IPv6Range' => 'IPs auflisten und auswählen',                                               
-	'UI:IPManagement:Action:ListIps:IPv6Range:PageTitle_Object_Class' => 'TeemIp - %1$s - IPs',
+	'UI:IPManagement:Action:ListIps:IPv6Range:PageTitle_Object_Class' => '%1$s - IPs',
 	'UI:IPManagement:Action:ListIps:IPv6Range:Title_Class_Object' => 'Liste von IPs in %1$s: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:ListIps:IPv6Range:Subtitle_ListRange' => 'Bereich ist zu groß, um alle IPs aufzulisten. Bitte kleineren Bereich auswählen:',                                               
 	'UI:IPManagement:Action:ListIps:IPv6Range:FirstIP' => 'Erste IP der Liste',                                               
@@ -389,7 +402,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	
 	// Do list IPs action on IP Ranges 
 	'UI:IPManagement:Action:DoListIps:IPv6Range' => 'IPs auflisten und auswählen',                                              
-	'UI:IPManagement:Action:DoListIps:IPv6Range:PageTitle_Object_Class' => 'TeemIp - %1$s - IPs',
+	'UI:IPManagement:Action:DoListIps:IPv6Range:PageTitle_Object_Class' => '%1$s - IPs',
 	'UI:IPManagement:Action:DoListIps:IPv6Range:Title_Class_Object' => 'Partielle Liste der IPs in %1$s: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:DoListIps:IPv6Range:CannotBeListed' => 'Bereich kann nicht aufgelistet werden: %1$s',
 	'UI:IPManagement:Action:DoListIps:IPv6Range:FirstIPOutOfRange' => 'Erste IP ausserhalb des Bereichs!',
@@ -398,7 +411,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 
 	// CSV Export action on IP Ranges
 	'UI:IPManagement:Action:CsvExportIps:IPv6Range' => 'CSV Export von IPs',
-	'UI:IPManagement:Action:CsvExportIps:IPv6Range:PageTitle_Object_Class' => 'TeemIp - %1$s - %2$s CSV Export von IPs',
+	'UI:IPManagement:Action:CsvExportIps:IPv6Range:PageTitle_Object_Class' => '%1$s - %2$s CSV Export von IPs',
 	'UI:IPManagement:Action:CsvExportIps:IPv6Range:Title_Class_Object' => 'CSV Export der IPs von %1$s: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:CsvExportIps:IPv6Range:Subtitle_ListRange' => 'Bereich ist zum groß, um alle IPs gleichzeitig zu exportieren. Btte einen Unterbereich auswählen:',                                               
 	'UI:IPManagement:Action:CsvExportIps:IPv6Range:FirstIP' => 'Erste IP der Liste',                                               
@@ -406,7 +419,7 @@ Dict::Add('DE DE', 'German', 'Deutsch', array(
 	
 	// Do CSV Export IPs action on IP Ranges
 	'UI:IPManagement:Action:DoCsvExportIps:IPv6Range' => 'CSV Export von IPs',                                               
-	'UI:IPManagement:Action:DoCsvExportIps:IPv6Range:PageTitle_Object_Class' => 'TeemIp - %1$s - %2$s CSV Export von IPs',
+	'UI:IPManagement:Action:DoCsvExportIps:IPv6Range:PageTitle_Object_Class' => '%1$s - %2$s CSV Export von IPs',
 	'UI:IPManagement:Action:DoCsvExportIps:IPv6Range:Title_Class_Object' => 'Teilweiser CSV Export von IPs %1$s: <span class="hilite">%2$s</span>',
 	'UI:IPManagement:Action:DoCsvExportIps:IPv6Range:CannotBeListed' => 'Bereich kann nicht exportiert werden: %1$s',
 	'UI:IPManagement:Action:DoCsvExportIps:IPv6Range:FirstIPOutOfRange' => 'Erste IP ausserhalb des Bereichs',

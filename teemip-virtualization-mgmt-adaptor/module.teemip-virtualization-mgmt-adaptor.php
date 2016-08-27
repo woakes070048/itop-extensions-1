@@ -3,11 +3,11 @@
 
 SetupWebPage::AddModule(
 	__FILE__,
-	'teemip-virtualization-mgmt-adaptor/2.0.0',
+	'teemip-virtualization-mgmt-adaptor/2.1.0',
 	array(
 		// Identification
 		//
-		'label' => 'iTop Virtualization Mgmt Adaptor',
+		'label' => 'TeemIp adaptor for iTop Virtualization Mgmt',
 		'category' => 'business',
 
 		// Setup

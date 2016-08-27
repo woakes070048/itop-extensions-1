@@ -109,7 +109,7 @@ class _IPObject extends cmdbAbstractObject
 	function DisplayGlobalParametersInLocalModifyForm(WebPage $oP, $sParameter, $aDefault = array())
 	{
 		// Get Global config object
-		$oIpConfig = GetGlobalIPConfig($this->Get('org_id'));
+		$oIpConfig = IPConfig::GetGlobalIPConfig($this->Get('org_id'));
 		$aDetails = array();
 	
 		// Display Parameter with option to be changed for the transaction
@@ -131,4 +131,32 @@ class _IPObject extends cmdbAbstractObject
 		$oP->Details($aDetails);
 	}		
 
+	/*
+	 * Perform actions when new object inserted in DB 
+	 */
+	protected function OnInsert()
+	{
+		// Run standard checks first
+		parent::OnInsert();
+		
+		if ($this->Get('status') == 'allocated')
+		{
+			$this->Set('allocation_date', time());
+		}
+	}
+	
+	/*
+	 * Perform actions when new object inserted in DB 
+	 */
+	protected function OnUpdate()
+	{
+		// Run standard checks first
+		parent::OnUpdate();
+		
+		if (($this->Get('status') == 'allocated') && ($this->GetOriginal('status') != 'allocated'))
+		{
+			$this->Set('allocation_date', time());
+		}
+	}
+	 
 }

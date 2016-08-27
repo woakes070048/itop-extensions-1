@@ -5,7 +5,7 @@
       <fields>
         <field id="managementip" xsi:type="AttributeIPAddress" _delta="delete"/>
         <field id="managementip_id" xsi:type="AttributeExternalKey" _delta="define">
-          <filter><![CDATA[SELECT IPAddress AS ip WHERE (ip.status != 'allocated' OR ip.id = :this->managementip_id) AND ip.org_id = :this->org_id]]></filter>
+          <filter><![CDATA[SELECT IPAddress AS ip WHERE (ip.status NOT IN ('allocated', 'reserved') OR ip.id = :this->managementip_id) AND ip.org_id = :this->org_id]]></filter>
           <dependencies>
             <attribute id="org_id"/>
          </dependencies>
@@ -30,15 +30,8 @@
 		parent::AfterInsert();
 		
 		$iIpId = $this->Get('managementip_id');
-		if ($iIpId != null)
-		{
-			$oIP = MetaModel::GetObject('IPAddress', $iIpId, false /* MustBeFound */);
-			if (!is_null($oIP)) 
-			{
-				$oIP->Set('status', 'allocated');	
-				$oIP->DBUpdate();
-			}
-		}
+		IPAddress::SetStatusOnAttachment($iIpId);
+
 	}]]></code>
         </method>
         <method id="AfterUpdate" _delta="define">
@@ -52,33 +45,8 @@
 		
 		$iIpId = $this->Get('managementip_id');
 		$iPreviousIpId = $this->GetOriginal('managementip_id');
-		if ($iIpId != $iPreviousIpId)
-		{
-			if ($iIpId != null)
-			{
-				$oIP = MetaModel::GetObject('IPAddress', $iIpId, false /* MustBeFound */);
-				if ($oIP != null)
-				{
-					if ($oIP->Get('status') != 'allocated')
-					{
-						$oIP->Set('status', 'allocated');	
-						$oIP->DBUpdate();
-					}
-				}
-			}
-			if ($iPreviousIpId != null)
-			{
-				$oIP = MetaModel::GetObject('IPAddress', $iPreviousIpId, false /* MustBeFound */);
-				if ($oIP != null)
-				{
-					if ($oIP->Get('status') == 'allocated')
-					{
-						$oIP->Set('status', 'unassigned');	
-						$oIP->DBUpdate();
-					}
-				}
-			}
-		}
+		IPAddress::SetStatusOnAttachment($iIpId, $iPreviousIpId);
+
 	}]]></code>
         </method>
         <method id="OnDelete" _delta="define">
@@ -91,18 +59,8 @@
 		parent::OnDelete();
 		
 		$iIpId = $this->Get('managementip_id');
-		if ($iIpId != null)
-		{
-			$oIP = MetaModel::GetObject('IPAddress', $iIpId, false /* MustBeFound */);
-			if ($oIP != null)
-			{
-				if ($oIP->Get('status') == 'allocated')
-				{
-					$oIP->Set('status', 'unassigned');	
-					$oIP->DBUpdate();
-				}
-			}
-		}
+		IPAddress::SetStatusOnDetachment($iIpId);
+
 	}]]></code>
         </method>
       </methods>
@@ -231,7 +189,7 @@
 				$sOrgId = $oObject->Get('org_id');
 				if ($sOrgId != null)
 				{
-					return(GetFromGlobalIPConfig('mac_address_format', $sOrgId));
+					return(IPConfig::GetFromGlobalIPConfig('mac_address_format', $sOrgId));
 				}
 			}
 			return('colons');

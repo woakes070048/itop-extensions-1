@@ -21,7 +21,8 @@
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
-require_once('../../approot.inc.php');
+if (!defined('__DIR__')) define('__DIR__', dirname(__FILE__));
+if (!defined('APPROOT')) require_once(__DIR__.'/../../approot.inc.php');
 require_once(APPROOT.'/application/application.inc.php');
 require_once(APPROOT.'/application/webpage.class.inc.php');
 require_once(APPROOT.'/application/ajaxwebpage.class.inc.php');
@@ -37,7 +38,7 @@ try
 	require_once(APPROOT.'/application/user.preferences.class.inc.php');
 	
 	require_once(APPROOT.'/application/loginwebpage.class.inc.php');
-	LoginWebPage::DoLogin(false /* bMustBeAdmin */, true /* IsAllowedToPortalUsers */); // Check user rights and prompt if needed
+	LoginWebPage::DoLogin(); // Check user rights and prompt if needed
 	
 	$oP = new ajax_page("");
 	$oP->no_cache();

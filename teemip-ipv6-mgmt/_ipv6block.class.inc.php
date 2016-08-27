@@ -90,7 +90,7 @@ class _IPv6Block extends IPBlock
 		if (empty($iBlockMinPrefix))
 		{
 			$sOrgId = $this->Get('org_id');
-			$iBlockMinPrefix = GetFromGlobalIPConfig('ipv6_block_min_prefix', $sOrgId);
+			$iBlockMinPrefix = IPConfig::GetFromGlobalIPConfig('ipv6_block_min_prefix', $sOrgId);
 		}
 		else
 		{
@@ -281,7 +281,7 @@ class _IPv6Block extends IPBlock
 		if (empty($sBlockCidrAligned))
 		{
 			$sOrgId = $this->Get('org_id');
-			$sBlockCidrAligned = GetFromGlobalIPConfig('ipv6_block_cidr_aligned', $sOrgId);
+			$sBlockCidrAligned = IPConfig::GetFromGlobalIPConfig('ipv6_block_cidr_aligned', $sOrgId);
 		}
 		if ($sBlockCidrAligned == 'bca_yes')
 		{
@@ -396,6 +396,103 @@ class _IPv6Block extends IPBlock
 				break;
 		}
 		return $aParam;
+	}
+	
+	/**
+	 * Check if space can be searched
+ 	 */
+	function DoCheckToDisplayAvailableSpace($aParam)
+	{
+		return '';
+	}
+	
+	/**
+	 * Displays available space
+	 */
+	function DoDisplayAvailableSpace(WebPage $oP, $iChangeId, $sParameter)
+	{
+		$iId = $this->GetKey();
+		$sOrgId = $this->Get('org_id');
+		$iPrefix = $sParameter['spacesize'];
+		$iMaxOffer = $sParameter['maxoffer'];
+		$sStatusSubnet = $sParameter['status_subnet'];
+		$sType = $sParameter['type'];
+		$iLocationId = $sParameter['location_id'];
+		$iRequestorId = $sParameter['requestor_id'];
+		$bOfferBlock = ($iChangeId == 0) ? true : false;
+		$bOfferSubnet = ($iPrefix == IPV6_SUBNET_PREFIX) ? true : false;
+		
+		// Get list of free space in subnet range
+		$aFreeSpace = $this->GetFreeSpace($iPrefix, $iMaxOffer);
+		
+		$oAppContext = new ApplicationContext();
+		$sParams = $oAppContext->GetForLink();
+		
+		// Check user rights
+		$UserHasRightsToCreateBlocks = (UserRights::IsActionAllowed('IPv6Block', UR_ACTION_MODIFY) == UR_ALLOWED_YES) ? true : false;
+		$UserHasRightsToCreateSubnets = (UserRights::IsActionAllowed('IPv6Subnet', UR_ACTION_MODIFY) == UR_ALLOWED_YES) ? true : false;
+			
+		// Display Summary of parameters
+		$oP->add("<ul>\n");
+		$oP->add("<li>"."&nbsp;".Dict::Format('UI:IPManagement:Action:DoFindSpace:IPv6Block:Summary', $iMaxOffer, $iPrefix)."<ul>\n");
+		
+		// Display possible choices as list
+		$iSizeFreeArray = sizeof ($aFreeSpace);
+		if ($iSizeFreeArray != 0)
+		{
+			$i = 0;
+			$iVIdCounter = 1;
+			do
+			{
+				$sAnIp = $aFreeSpace[$i]['firstip']->ToString();
+				$sLastIp = $aFreeSpace[$i]['lastip']->ToString();
+				$sMask = $aFreeSpace[$i]['mask']->ToString();
+				$oP->add("<li>".$sAnIp." - ".$sLastIp."\n"."<ul>");
+				
+				// If user has rights to create block
+				// Display block with icon to create it
+				if ($bOfferBlock)
+				{
+					if ($UserHasRightsToCreateBlocks)
+					{
+						$iVId = $iVIdCounter++;
+						$sHTMLValue = "<li><div><span id=\"v_{$iVId}\">";
+						$sHTMLValue .= "<img style=\"border:0;vertical-align:middle;cursor:pointer;\" src=\"".utils::GetAbsoluteUrlModulesRoot()."/teemip-ip-mgmt/images/ipmini-add-xs.png\" onClick=\"oIpWidget_{$iVId}.DisplayCreationForm();\"/>&nbsp;";
+						$sHTMLValue .= "&nbsp;".Dict::Format('UI:IPManagement:Action:DoFindSpace:IPv6Block:CreateAsBlock')."&nbsp;&nbsp;";
+						$sHTMLValue .= "</span></div></li>\n";
+						$oP->add($sHTMLValue);	
+						$oP->add_ready_script(
+<<<EOF
+						oIpWidget_{$iVId} = new IpWidget($iVId, 'IPv6Block', $iChangeId, {'org_id': '$sOrgId', 'parent_id': '$iId', 'firstip': '$sAnIp', 'lastip': '$sLastIp'});
+EOF
+						);
+					}
+				}
+				
+				// Create as a subnet
+				if ($bOfferSubnet)
+				{
+					if ($UserHasRightsToCreateSubnets)
+					{
+						$iVId = $iVIdCounter++;
+						$sHTMLValue = "<li><div><span id=\"v_{$iVId}\">";
+						$sHTMLValue .= "<img style=\"border:0;vertical-align:middle;cursor:pointer;\" src=\"".utils::GetAbsoluteUrlModulesRoot()."/teemip-ip-mgmt/images/ipmini-add-xs.png\" onClick=\"oIpWidget_{$iVId}.DisplayCreationForm();\"/>&nbsp;";
+						$sHTMLValue .= "&nbsp;".Dict::Format('UI:IPManagement:Action:DoFindSpace:IPv6Block:CreateAsSubnet')."&nbsp;&nbsp;";
+						$sHTMLValue .= "</span></div></li>\n";
+						$oP->add($sHTMLValue);	
+						$oP->add_ready_script(
+<<<EOF
+						oIpWidget_{$iVId} = new IpWidget($iVId, 'IPv6Subnet', $iChangeId, {'org_id': '$sOrgId', 'block_id': '$iId', 'ip': '$sAnIp', 'mask': '$sMask', 'status': '$sStatusSubnet', 'type': '$sType', 'location_id': '$iLocationId', 'requestor_id': '$iRequestorId'});
+EOF
+						);
+					}
+				}
+					
+				$oP->add("</ul></li>\n"); 
+			}
+			while (++$i < $iSizeFreeArray);
+		}
+		$oP->add("</ul></li></ul>\n");
 	}
 	
 	/**
@@ -888,11 +985,11 @@ class _IPv6Block extends IPBlock
 		$oFirstIpBlockToDel = $this->Get('firstip');
 		$oLastIpBlockToDel = $this->Get('lastip');
 		$iChildOrgId = $aParam['child_org_id'];
-
-		// If block is already delegated, 
+		$sDelegateToChildrenOnly = IPConfig::GetFromGlobalIPConfig('delegate_to_children_only', $iOrgId);
+		
+		// If block should be delegated to children only and if it's already delegated, 
 		// 	Make sure redelegation is done at the same level of organization.
-		//  Make sure that new child organization is different from the current one
-		if ($this->Get('parent_org_id') != 0)
+		if (($sDelegateToChildrenOnly == 'dtc_yes') && ($this->Get('parent_org_id') != 0))
 		{
 			$oBlockOrg = MetaModel::GetObject('Organization', $iOrgId, true /* MustBeFound */);
 			$oChildBlockOrg = MetaModel::GetObject('Organization', $iChildOrgId, true /* MustBeFound */);
@@ -900,12 +997,13 @@ class _IPv6Block extends IPBlock
 			{
 				return (Dict::Format('UI:IPManagement:Action:Delegate:IPBlock:WrongLevelOfOrganization'));
 			}
-			
-			if ($iChildOrgId == $iOrgId)
-			{
-				return (Dict::Format('UI:IPManagement:Action:Delegate:IPBlock:NoChangeOfOrganization'));
-			}
-		} 
+		}
+
+		//  Make sure that new child organization is different from the current one
+		if ($iChildOrgId == $iOrgId)
+		{
+			return (Dict::Format('UI:IPManagement:Action:Delegate:IPBlock:NoChangeOfOrganization'));
+		}
 		
 		// Make sure block has no children blocks and no children subnets
 		$oChildrenBlockSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv6Block AS b WHERE b.parent_id = $iBlockId"));
@@ -1222,95 +1320,6 @@ class _IPv6Block extends IPBlock
 	}
 	
 	/**
-	 * Displays available space
-	 */
-	function DisplayAvailableSpace(WebPage $oP, $iChangeId, $sParameter)
-	{
-		$iId = $this->GetKey();
-		$sOrgId = $this->Get('org_id');
-		$iPrefix = $sParameter['spacesize'];
-		$iMaxOffer = $sParameter['maxoffer'];
-		$sStatusSubnet = $sParameter['status_subnet'];
-		$sType = $sParameter['type'];
-		$iLocationId = $sParameter['location_id'];
-		$iRequestorId = $sParameter['requestor_id'];
-		$bOfferBlock = ($iChangeId == 0) ? true : false;
-		$bOfferSubnet = ($iPrefix == IPV6_SUBNET_PREFIX) ? true : false;
-		
-		// Get list of free space in subnet range
-		$aFreeSpace = $this->GetFreeSpace($iPrefix, $iMaxOffer);
-		
-		$oAppContext = new ApplicationContext();
-		$sParams = $oAppContext->GetForLink();
-		
-		// Check user rights
-		$UserHasRightsToCreateBlocks = (UserRights::IsActionAllowed('IPv6Block', UR_ACTION_MODIFY) == UR_ALLOWED_YES) ? true : false;
-		$UserHasRightsToCreateSubnets = (UserRights::IsActionAllowed('IPv6Subnet', UR_ACTION_MODIFY) == UR_ALLOWED_YES) ? true : false;
-			
-		// Display Summary of parameters
-		$oP->add("<ul>\n");
-		$oP->add("<li>"."&nbsp;".Dict::Format('UI:IPManagement:Action:DoFindSpace:IPv6Block:Summary', $iMaxOffer, $iPrefix)."<ul>\n");
-		
-		// Display possible choices as list
-		$iSizeFreeArray = sizeof ($aFreeSpace);
-		if ($iSizeFreeArray != 0)
-		{
-			$i = 0;
-			$iVIdCounter = 1;
-			do
-			{
-				$sAnIp = $aFreeSpace[$i]['firstip']->ToString();
-				$sLastIp = $aFreeSpace[$i]['lastip']->ToString();
-				$sMask = $aFreeSpace[$i]['mask']->ToString();
-				$oP->add("<li>".$sAnIp." - ".$sLastIp."\n"."<ul>");
-				
-				// If user has rights to create block
-				// Display block with icon to create it
-				if ($bOfferBlock)
-				{
-					if ($UserHasRightsToCreateBlocks)
-					{
-						$iVId = $iVIdCounter++;
-						$sHTMLValue = "<li><div><span id=\"v_{$iVId}\">";
-						$sHTMLValue .= "<img style=\"border:0;vertical-align:middle;cursor:pointer;\" src=\"".utils::GetAbsoluteUrlModulesRoot()."/teemip-ip-mgmt/images/ipmini-add-xs.png\" onClick=\"oIpWidget_{$iVId}.DisplayCreationForm();\"/>&nbsp;";
-						$sHTMLValue .= "&nbsp;".Dict::Format('UI:IPManagement:Action:DoFindSpace:IPv6Block:CreateAsBlock')."&nbsp;&nbsp;";
-						$sHTMLValue .= "</span></div></li>\n";
-						$oP->add($sHTMLValue);	
-						$oP->add_ready_script(
-<<<EOF
-						oIpWidget_{$iVId} = new IpWidget($iVId, 'IPv6Block', $iChangeId, {'org_id': '$sOrgId', 'parent_id': '$iId', 'firstip': '$sAnIp', 'lastip': '$sLastIp'});
-EOF
-						);
-					}
-				}
-				
-				// Create as a subnet
-				if ($bOfferSubnet)
-				{
-					if ($UserHasRightsToCreateSubnets)
-					{
-						$iVId = $iVIdCounter++;
-						$sHTMLValue = "<li><div><span id=\"v_{$iVId}\">";
-						$sHTMLValue .= "<img style=\"border:0;vertical-align:middle;cursor:pointer;\" src=\"".utils::GetAbsoluteUrlModulesRoot()."/teemip-ip-mgmt/images/ipmini-add-xs.png\" onClick=\"oIpWidget_{$iVId}.DisplayCreationForm();\"/>&nbsp;";
-						$sHTMLValue .= "&nbsp;".Dict::Format('UI:IPManagement:Action:DoFindSpace:IPv6Block:CreateAsSubnet')."&nbsp;&nbsp;";
-						$sHTMLValue .= "</span></div></li>\n";
-						$oP->add($sHTMLValue);	
-						$oP->add_ready_script(
-<<<EOF
-						oIpWidget_{$iVId} = new IpWidget($iVId, 'IPv6Subnet', $iChangeId, {'org_id': '$sOrgId', 'block_id': '$iId', 'ip': '$sAnIp', 'mask': '$sMask', 'status': '$sStatusSubnet', 'type': '$sType', 'location_id': '$iLocationId', 'requestor_id': '$iRequestorId'});
-EOF
-						);
-					}
-				}
-					
-				$oP->add("</ul></li>\n"); 
-			}
-			while (++$i < $iSizeFreeArray);
-		}
-		$oP->add("</ul></li></ul>\n");
-	}
-	
-	/**
 	 * Displays all space (used and non used within block)
 	 */
 	function DisplayAllSpace(WebPage $oP)
@@ -1475,7 +1484,29 @@ EOF
 	}
 			
 	/**
-	* Check validity of new block attributes before creation
+	 * Compute attributes before writing object 
+	 */     
+	public function ComputeValues()
+	{
+		// Preset LastIP to save the typing of too many 'f'
+		$oFirstIp = $this->Get('firstip');
+		$iPreviousFirstIp = $this->GetOriginal('firstip');
+		$oLastIp = $this->Get('lastip');	 
+		$oZero = new ormIPv6('::');
+
+		if (! $oFirstIp->IsEqual($oZero))
+		{
+			if ($oLastIp->IsEqual($oZero))
+			{
+				$oMask = new ormIPv6(IPV6_BLOCK_MIN_MASK);
+				$oLastIp = $oFirstIp->BitwiseOr($oMask->BitwiseNot());
+				$this->Set('lastip', $oLastIp);			
+			}
+		}
+	}
+
+	/**
+ 	 * Check validity of new block attributes before creation
 	 */
 	public function DoCheckToWrite()
 	{
@@ -1535,7 +1566,8 @@ EOF
 			// Default value may be overwritten but not under absolute minimum value.
 			if (! $this->DoCheckHasMinBlockSize($oFirstIp, $oLastIp))
 			{
-				$this->m_aCheckIssues[] = Dict::Format('UI:IPManagement:Action:New:IPBlock:SmallerThanMinSize', $iBlockMinSize);
+				$iBlockMinPrefix = $this->GetMinBlockPrefix();				
+				$this->m_aCheckIssues[] = Dict::Format('UI:IPManagement:Action:New:IPBlock:SmallerThanMinSize', $iBlockMinPrefix);
 				return;
 			}
 			
@@ -1571,6 +1603,11 @@ EOF
 			//		If no parent is specified (null), then check is done with all such blocks with null parent specified.
 			//		It is done on blocks belonging to the same parent otherwise
 			$oSRangeSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv6Block AS b WHERE b.parent_id = '$iParentId' AND (b.org_id = $sOrgId OR b.parent_org_id = $sOrgId) AND b.id != $iKey"));
+			if ($iParentId == 0)
+			{
+				$oSRangeSet2 = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv4Block AS b WHERE b.parent_org_id != 0 AND b.org_id = $sOrgId AND b.id != '$iKey'"));
+				$oSRangeSet->Append($oSRangeSet2);
+			}
 			while ($oSRange = $oSRangeSet->Fetch())
 			{
 				$oRangeFirstIp = $oSRange->Get('firstip');
@@ -1611,7 +1648,7 @@ EOF
 				}		
 
 				// Make sure block has no children block that are delegated blocks
-				// 	This is not possible are delegated blocks may only provide from parent organization and that blocks with children cannot be delegated
+				// 	This is not possible as delegated blocks may only be provided from parent organization and that blocks with children cannot be delegated
 				
 				// Make sure that there is no collision with brother blocks from parent organization
 				$oSRangeSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv6Block AS b WHERE b.parent_id = $iParentId AND b.org_id = $iParentOrgId"));
@@ -1645,7 +1682,7 @@ EOF
 	
 	/**
 	 * Perform specific tasks related to block creation
-	 **/
+	 */
 	public function AfterInsert()
 	{
 		parent::AfterInsert();
@@ -1678,13 +1715,13 @@ EOF
 		// Attach them to new block
 		if ($iParentOrgId != 0)
 		{ 
-			$oSRangeSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv6Block AS b WHERE b.parent_id = 0 AND :firstip' <= b.firstip AND b.lastip <= :lastip AND b.org_id = $sOrgId", array('firstip' => $sFirstIp, 'lastip' => $sLastIp)));
+			$oSRangeSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv6Block AS b WHERE b.parent_id = 0 AND :firstip <= b.firstip AND b.lastip <= :lastip AND b.org_id = $sOrgId", array('firstip' => $sFirstIp, 'lastip' => $sLastIp)));
 			while ($oSRange = $oSRangeSet->Fetch())
 			{
 				$oSRange->Set('parent_id', $iKey);
 				$oSRange->DBUpdate();	
 			}
-		}
+		}      
 
 		// If block is not at the top (all subnets are attached to a block), 
 		//	Look for all subnets attached to parent block contained within new block

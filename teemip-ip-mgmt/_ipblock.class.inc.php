@@ -47,6 +47,7 @@ class _IPBlock extends IPObject
 		switch ($sOperation)
 		{
 			case 'findspace': return 'dofindspace';
+			case 'dofindspace': return 'findspace';
 			
 			case 'shrinkblock': return 'doshrinkblock';
 			case 'doshrinkblock': return 'shrinkblock';
@@ -72,13 +73,28 @@ class _IPBlock extends IPObject
 		switch($sOperation)
 		{
 			case 'delegate':
-				// Check if block's org has children
-				$sOrgId = $this->Get('org_id');
-				$oOrgSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT Organization AS o WHERE o.parent_id = $sOrgId"));
-				if ($oOrgSet->Count() == 0)
+				// If delegation can be done to children orgs only,
+				// 		Check if block's org has children
+				// If not
+				// 		Check if another organisation exists
+				$iOrgId = $this->Get('org_id');
+				$sDelegateToChildrenOnly = IPConfig::GetFromGlobalIPConfig('delegate_to_children_only', $iOrgId);
+				if ($sDelegateToChildrenOnly == 'dtc_yes')
 				{
-					return ('NoChildOrg');
+					$oOrgSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT Organization AS o WHERE o.parent_id = $iOrgId"));
+					if ($oOrgSet->Count() == 0)
+					{
+						return ('NoChildOrg');
+					}
 				}
+				else
+				{
+					$oOrgSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT Organization AS o WHERE o.id != $iOrgId"));
+					if ($oOrgSet->Count() == 0)
+					{
+						return ('NoOtherOrg');
+					}
+				}					
 				break;
 				
 			case 'shrinkblock':

@@ -3,11 +3,11 @@
 
 SetupWebPage::AddModule(
 	__FILE__,
-	'teemip-storage-mgmt-adaptor/2.0.0',
+	'teemip-storage-mgmt-adaptor/2.1.0',
 	array(
 		// Identification
 		//
-		'label' => 'iTop Storage Mgmt Adaptor',
+		'label' => 'TeemIp adaptor for iTop Storage Mgmt',
 		'category' => 'business',
 
 		// Setup

@@ -47,6 +47,7 @@ class _IPSubnet extends IPObject
 		switch ($sOperation)
 		{
 			case 'findspace': return 'dofindspace';
+			case 'dofindspace': return 'findspace';
 				
 			case 'listips': return 'dolistips';
 			case 'dolistips': return 'listips';
@@ -140,8 +141,8 @@ class _IPSubnet extends IPObject
 			$sOrgId = $this->Get('org_id');
 			if ($sOrgId != null)
 			{
-				$sLowWaterMark = GetFromGlobalIPConfig('subnet_low_watermark', $sOrgId);
-				$sHighWaterMark = GetFromGlobalIPConfig('subnet_high_watermark', $sOrgId);
+				$sLowWaterMark = IPConfig::GetFromGlobalIPConfig('subnet_low_watermark', $sOrgId);
+				$sHighWaterMark = IPConfig::GetFromGlobalIPConfig('subnet_high_watermark', $sOrgId);
 				if ($Occupancy >= $sHighWaterMark)
 				{
 					$sColor = RED;

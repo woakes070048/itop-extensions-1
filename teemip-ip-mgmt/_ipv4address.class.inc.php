@@ -126,9 +126,18 @@ class _IPv4Address extends IPAddress
 					return;
 				}
 			}
-			// If not, make sure IP belongs to subnet
+			// If not:
+			// - Look for IP Range that IP may belong to
+			// - Make sure IP belongs to subnet
 			else
 			{
+				$oIpRangeSet = new CMDBObjectSet(DBObjectSearch::FromOQL("SELECT IPv4Range AS r WHERE INET_ATON(r.firstip) <= INET_ATON('$sIp') AND INET_ATON('$sIp') <= INET_ATON(r.lastip) AND r.org_id = $sOrgId"));
+				if ($oIpRangeSet->Count() != 0)
+				{
+					$oIpRange = $oIpRangeSet->Fetch();
+					$this->Set('range_id', $oIpRange->GetKey());
+				}
+
 				$iSubnetId = $this->Get('subnet_id');
 				if ($iSubnetId != 0)
 				{
@@ -156,7 +165,7 @@ class _IPv4Address extends IPAddress
 			$sPingBeforeAssign = utils::ReadPostedParam('attr_ping_before_assign', '');
 			if (empty($sPingBeforeAssign))
 			{
-				$sPingBeforeAssign = GetFromGlobalIPConfig('ping_before_assign', $sOrgId);
+				$sPingBeforeAssign = IPConfig::GetFromGlobalIPConfig('ping_before_assign', $sOrgId);
 			}
 			if ($sPingBeforeAssign =='ping_yes')
 			{
@@ -196,8 +205,8 @@ class _IPv4Address extends IPAddress
 			if ($iSubnetId != 0)
 			{
 				$oSubnet = MetaModel::GetObject('IPv4Subnet', $iSubnetId, true /* MustBeFound */);
-				$sSubnetLowWaterMark = GetFromGlobalIPConfig('subnet_low_watermark', $sOrgId);
-				$sSubnetHighWaterMark = GetFromGlobalIPConfig('subnet_high_watermark', $sOrgId);
+				$sSubnetLowWaterMark = IPConfig::GetFromGlobalIPConfig('subnet_low_watermark', $sOrgId);
+				$sSubnetHighWaterMark = IPConfig::GetFromGlobalIPConfig('subnet_high_watermark', $sOrgId);
 				if ($oSubnet->GetSize() > 4)
 				{
 					$oSubnetOccupancy = $oSubnet->GetOccupancy('IPv4Address');
@@ -239,8 +248,8 @@ class _IPv4Address extends IPAddress
 			if ($iIpRangeId != null)
 			{
 				$oIpRange = MetaModel::GetObject('IPv4Range', $iIpRangeId, true /* MustBeFound */);
-				$sIpRangeLowWaterMark = GetFromGlobalIPConfig('iprange_low_watermark', $sOrgId);
-				$sIpRangeHighWaterMark = GetFromGlobalIPConfig('iprange_high_watermark', $sOrgId);
+				$sIpRangeLowWaterMark = IPConfig::GetFromGlobalIPConfig('iprange_low_watermark', $sOrgId);
+				$sIpRangeHighWaterMark = IPConfig::GetFromGlobalIPConfig('iprange_high_watermark', $sOrgId);
 
 				$oIpRangeOccupancy = $oIpRange->GetOccupancy('IPv4Address');
 				$oIpRangeAlarm = $oIpRange->Get('alarm_water_mark');
@@ -290,8 +299,8 @@ class _IPv4Address extends IPAddress
 		if ($iSubnetId != 0)
 		{
 			$oSubnet = MetaModel::GetObject('IPv4Subnet', $iSubnetId, true /* MustBeFound */);
-			$sSubnetLowWaterMark = GetFromGlobalIPConfig('subnet_low_watermark', $sOrgId);
-			$sSubnetHighWaterMark = GetFromGlobalIPConfig('subnet_high_watermark', $sOrgId);
+			$sSubnetLowWaterMark = IPConfig::GetFromGlobalIPConfig('subnet_low_watermark', $sOrgId);
+			$sSubnetHighWaterMark = IPConfig::GetFromGlobalIPConfig('subnet_high_watermark', $sOrgId);
 	
 			$oSubnetOccupancy = $oSubnet->GetOccupancy('IPv4Address');
 			$oSubnetAlarm = $oSubnet->Get('alarm_water_mark');
@@ -321,8 +330,8 @@ class _IPv4Address extends IPAddress
 		if ($iIpRangeId != null)
 		{
 			$oIpRange = MetaModel::GetObject('IPv4Range', $iIpRangeId, true /* MustBeFound */);
-			$sIpRangeLowWaterMark = GetFromGlobalIPConfig('iprange_low_watermark', $sOrgId);
-			$sIpRangeHighWaterMark = GetFromGlobalIPConfig('iprange_high_watermark', $sOrgId);
+			$sIpRangeLowWaterMark = IPConfig::GetFromGlobalIPConfig('iprange_low_watermark', $sOrgId);
+			$sIpRangeHighWaterMark = IPConfig::GetFromGlobalIPConfig('iprange_high_watermark', $sOrgId);
 
 			$oIpRangeOccupancy = $oIpRange->GetOccupancy('IPv4Address');
 			$oIpRangeAlarm = $oIpRange->Get('alarm_water_mark');
@@ -352,7 +361,7 @@ class _IPv4Address extends IPAddress
 	 */
 	public function GetAttributeFlags($sAttCode, &$aReasons = array(), $sTargetState = '')
 	{
-		if ((!$this->IsNew()) && ($sAttCode == 'ip'))
+		if ((!$this->IsNew()) && ($sAttCode == 'ip' || $sAttCode == 'subnet_id' || $sAttCode == 'range_id'))
 		{
 			return OPT_ATT_READONLY;
 		}

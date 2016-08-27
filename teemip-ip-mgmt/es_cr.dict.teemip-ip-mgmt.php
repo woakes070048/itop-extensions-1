@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2016 TeemIp
+// Copyright (C) 2014 TeemIp
 //
 //   This file is part of TeemIp.
 //
@@ -17,7 +17,7 @@
 //   along with TeemIp. If not, see <http://www.gnu.org/licenses/>
 
 /**
- * @copyright   Copyright (C) 2016 TeemIp
+ * @copyright   Copyright (C) 2014 TeemIp
  * @license     http://opensource.org/licenses/AGPL-3.0
  */
 
@@ -30,7 +30,7 @@
 // TeemIp specific attributes
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Core:AttributeIPPercentage' => 'IP percentage',
 	'Core:AttributeIPPercentage+' => 'Graphical display for percentage of usage',
 	'Core:AttributeMacAddress' => 'MAC address',
@@ -41,7 +41,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPObject
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPObject' => 'IP Object',
 	'Class:IPObject+' => '',
 	'Class:IPObject/Attribute:org_id' => 'Organization',
@@ -78,7 +78,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: lnkContactToIPObject
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:lnkContactToIPObject' => 'Link Contact / IP Object',
 	'Class:lnkContactToIPObject+' => '',
 	'Class:lnkContactToIPObject/Attribute:ipobject_id' => 'IP Object',
@@ -93,7 +93,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: lnkDocToIPObject
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:lnkDocToIPObject' => 'Link Document / IP Object',
 	'Class:lnkDocToIPObject+' => '',
 	'Class:lnkDocToIPObject/Attribute:ipobject_id' => 'IP Object',
@@ -108,7 +108,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: lnkIPObjectToTicket
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:lnkIPObjectToTicket' => 'Link IP Object / Ticket',
 	'Class:lnkIPObjectToTicket+' => '',
 	'Class:lnkIPObjectToTicket/Attribute:ipobject_id_finalclass_recall' => 'IP Object Type',
@@ -127,7 +127,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPBlock
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPBlock' => 'Subnet Block',
 	'Class:IPBlock+' => '',
 	'Class:IPBlock:baseinfo' => 'General Information',
@@ -158,12 +158,12 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class extensions for IPBlock
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPBlock/Tab:globalparam' => 'Global Settings',
 	'Class:IPBlock/Tab:childblock' => 'Child Blocks (%1$s)',
 	'Class:IPBlock/Tab:childblock+' => 'Blocks attached to this block',
 	'Class:IPBlock/Tab:childblock-count' => 'Child Blocks : %1$s',
-	'Class:IPBlock/Tab:childblock-count-percent' => ' Space used by Child Blocks.',
+	'Class:IPBlock/Tab:childblock-count-percent' => ' space used by Child Blocks.',
 	'Class:IPBlock/Tab:childblock-count-percent-remain' => 'Space used by Child Blocks in remaining space: %1$.1f %%',
 	'Class:IPBlock/Tab:subnet' => 'Subnets (%1$s)',
 	'Class:IPBlock/Tab:subnet+' => 'Subnets attached to this block',
@@ -176,7 +176,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: lnkBlockToLocation
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:lnkIPBlockToLocation' => 'Link Block / Location',
 	'Class:lnkIPBlockToLocation+' => '',
 	'Class:lnkIPBlockToLocation/Attribute:block_id' => 'Block',
@@ -193,7 +193,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPv4Block
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPv4Block' => 'IPv4 Subnet Block',
 	'Class:IPv4Block+' => '',
 	'Class:IPv4Block/Attribute:parent_id' => 'Parent',
@@ -210,7 +210,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPSubnet
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPSubnet' => 'Subnet',
 	'Class:IPSubnet+' => '',
 	'Class:IPSubnet:baseinfo' => 'General Information',
@@ -244,7 +244,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class extensions for IPSubnet
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPSubnet/Tab:globalparam' => 'Global Settings',
 	'Class:IPSubnet/Tab:ipregistered' => 'Registered IPs (%1$s)',
 	'Class:IPSubnet/Tab:ipregistered+' => 'IPs registered in the Subnet',
@@ -266,7 +266,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: lnkIPSubnetToVLAN
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:lnkIPSubnetToVLAN' => 'Link Subnet / VLAN',
 	'Class:lnkIPSubnetToVLAN+' => '',
 	'Class:lnkIPSubnetToVLAN/Attribute:ipsubnet_id_finalclass_recall' => 'Subnet type',
@@ -285,7 +285,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: lnkIPSubnetToVRF
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:lnkIPSubnetToVRF' => 'Link Subnet / VRF',
 	'Class:lnkIPSubnetToVRF+' => '',
 	'Class:lnkIPSubnetToVRF/Attribute:ipsubnet_id_finalclass_recall' => 'Subnet type',
@@ -302,7 +302,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: lnkIPSubnetToLocation
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:lnkIPSubnetToLocation' => 'Link Subnet / Location',
 	'Class:lnkIPSubnetToLocation+' => '',
 	'Class:lnkIPSubnetToLocation/Attribute:ipsubnet_id' => 'Subnet',
@@ -319,7 +319,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPv4Subnet
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPv4Subnet' => 'IPv4 Subnet',
 	'Class:IPv4Subnet+' => '',
 	'Class:IPv4Subnet/Attribute:block_id' => 'Subnet Block',
@@ -372,7 +372,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPRange
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPRange' => 'IP Range',
 	'Class:IPRange+' => '',
 	'Class:IPRange:baseinfo' => 'General Information',
@@ -399,7 +399,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class extensions for IPRange
 //                                                       
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPRange/Tab:ipregistered' => 'Registered IPs (%1$s)',
 	'Class:IPRange/Tab:ipregistered+' => 'IPs registered within the IP Range',
 	'Class:IPRange/Tab:ipregistered-count' => ' - %1$s Reserved and %2$s Allocated out of %3$s',
@@ -413,7 +413,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPv4Range
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPv4Range' => 'IPv4 Range',
 	'Class:IPv4Range+' => '',
 	'Class:IPv4Range/Attribute:subnet_id' => 'Subnet',
@@ -430,7 +430,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPAddress
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPAddress' => 'IP Address',
 	'Class:IPAddress+' => '',
 	'Class:IPAddress:baseinfo' => 'General Information',
@@ -444,8 +444,6 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:IPAddress/Attribute:domain_name+' => 'Name of the DNS domain',
 	'Class:IPAddress/Attribute:fqdn' => 'FQDN',
 	'Class:IPAddress/Attribute:fqdn+' => 'Fully Qualified Domain Name',
-	'Class:IPAddress/Attribute:aliases' => 'Aliases',
-	'Class:IPAddress/Attribute:aliases+' => 'List of aliases used for the FQDN',
 	'Class:IPAddress/Attribute:usage_id' => 'Usage',
 	'Class:IPAddress/Attribute:usage_id+' => '',
 	'Class:IPAddress/Attribute:usage_name' => 'Usage name',
@@ -468,7 +466,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class extensions for IPAddress
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPAddress/Tab:globalparam' => 'Global Settings',
 	'Class:IPAddress/Tab:parents' => 'Parents',
 	'Class:IPAddress/Tab:ip_list' => 'NAT IPs (%1$s)',
@@ -493,7 +491,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: lnkIPAdressToIPAddress
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:lnkIPAdressToIPAddress' => 'Link IP / NAT IPs',
 	'Class:lnkIPAdressToIPAddress+' => '',
 	'Class:lnkIPAdressToIPAddress/Attribute:ip2_id_finalclass_recall' => 'IP Type',
@@ -516,7 +514,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: lnkIPInterfaceToIPAddress
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:lnkIPInterfaceToIPAddress' => 'Link IP interface/ IP Address',
 	'Class:lnkIPInterfaceToIPAddress+' => '',
 	'Class:lnkIPInterfaceToIPAddress/Attribute:ipaddress_id_finalclass_recall' => 'IP Type',
@@ -533,7 +531,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPv4Address
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPv4Address' => 'IPv4 Address',
 	'Class:IPv4Address+' => '',
 	'Class:IPv4Address/Attribute:subnet_id' => 'Subnet',
@@ -548,7 +546,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPConfig
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPConfig' => 'Global IP Setting',
 	'Class:IPConfig+' => '',
 	'Class:IPConfig:baseinfo' => 'General Information',
@@ -575,12 +573,6 @@ Dict::Add('EN US', 'English', 'English', array(
 	'Class:IPConfig/Attribute:ipv4_block_cidr_aligned/Value:bca_no+' => '',
 	'Class:IPConfig/Attribute:ipv4_block_cidr_aligned/Value:bca_yes' => 'Yes',
 	'Class:IPConfig/Attribute:ipv4_block_cidr_aligned/Value:bca_yes+' => '',
-	'Class:IPConfig/Attribute:delegate_to_children_only' => 'Delegate blocks to children organizations only',
-	'Class:IPConfig/Attribute:delegate_to_children_only+' => '',
-	'Class:IPConfig/Attribute:delegate_to_children_only/Value:dtc_no' => 'No',
-	'Class:IPConfig/Attribute:delegate_to_children_only/Value:dtc_no+' => '',
-	'Class:IPConfig/Attribute:delegate_to_children_only/Value:dtc_yes' => 'Yes',
-	'Class:IPConfig/Attribute:delegate_to_children_only/Value:dtc_yes+' => '',
 	'Class:IPConfig/Attribute:reserve_subnet_IPs' => 'Reserve Subnet, Gateway and Broadcast IPs at Subnet Creation',
 	'Class:IPConfig/Attribute:reserve_subnet_IPs+' => '',
 	'Class:IPConfig/Attribute:reserve_subnet_IPs/Value:reserve_no' => 'No',
@@ -631,7 +623,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPRangeUsage
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPRangeUsage' => 'IP Range Usage',
 	'Class:IPRangeUsage+' => 'What a Range of IP addresses is used for',
 	'Class:IPRangeUsage/Attribute:org_id' => 'Organization',
@@ -650,7 +642,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPUsage
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPUsage' => 'IP Address Usage',
 	'Class:IPUsage+' => 'What an IP address is used for',
 	'Class:IPUsage/Attribute:org_id' => 'Organization',
@@ -669,7 +661,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPTriggerOnWaterMark
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPTriggerOnWaterMark' => 'Trigger (when reaching an IP related water mark)',
 	'Class:IPTriggerOnWaterMark+' => '',
 	'Class:IPTriggerOnWaterMark/Attribute:org_id' => 'Organization',
@@ -690,7 +682,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: IPObjTemplate
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:IPObjTemplate' => 'Template IP',
 	'Class:IPObjTemplate+' => '',
 	'Class:IPObjTemplate/Attribute:servicesubcategory_id' => 'Subcategory Service',
@@ -709,7 +701,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Application Menu
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Menu:IPManagement' => 'IP Management',
 	'Menu:IPManagement+' => 'IP Management',
 	'Menu:IPManagement:Overview:Total' => 'Total: %1s',
@@ -810,7 +802,6 @@ Dict::Add('EN US', 'English', 'English', array(
 
 	// Delegate action on subnet blocks
 	'UI:IPManagement:Action:Delegate:IPBlock:NoChildOrg' => 'Block\'s organization doesn\'t have any children!',
-	'UI:IPManagement:Action:Delegate:IPBlock:NoOtherOrg' => 'There is no other organization than block\'s organization!',
 	'UI:IPManagement:Action:Delegate:IPBlock:WrongLevelOfOrganization' => 'Delegation change must be done to a sister organization!',
 	'UI:IPManagement:Action:Delegate:IPBlock:NoChangeOfOrganization' => 'No change has been required!',
 	'UI:IPManagement:Action:Delegate:IPBlock:HasChildBlocks' => 'Block has children blocks!',

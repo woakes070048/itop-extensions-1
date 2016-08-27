@@ -58,7 +58,7 @@ class _IPAddress extends IPObject
 		$sIpAllowDuplicateName = utils::ReadPostedParam('attr_ip_allow_duplicate_name', '');
 		if (empty($sIpAllowDuplicateName))
 		{
-			$sIpAllowDuplicateName = GetFromGlobalIPConfig('ip_allow_duplicate_name', $sOrgId);
+			$sIpAllowDuplicateName = IPConfig::GetFromGlobalIPConfig('ip_allow_duplicate_name', $sOrgId);
 		}
 		if ($sIpAllowDuplicateName == 'ipdup_no')
 		{
@@ -84,14 +84,14 @@ class _IPAddress extends IPObject
 	 */
 	function DisplayBareRelations(WebPage $oPage, $bEditMode = false)
 	{
+		// Execute parent function first 
+		parent::DisplayBareRelations($oPage, $bEditMode);
+			
 		$sOrgId = $this->Get('org_id');
 		if ($sOrgId != null)
 		{
 			if ($bEditMode)
 			{
-				// Execute parent function first 
-				parent::DisplayBareRelations($oPage, $bEditMode);
-			
 				// Tab for Global Parameters
 				$oPage->SetCurrentTab(Dict::Format('Class:IPAddress/Tab:globalparam'));
 				$oPage->p(Dict::Format('UI:IPManagement:Action:Modify:GlobalConfig'));
@@ -119,19 +119,27 @@ class _IPAddress extends IPObject
 				$oNatIpSearch = DBObjectSearch::FromOQL("SELECT lnkIPAdressToIPAddress AS ln WHERE (ln.ip1_id = $iKey OR ln.ip2_id = $iKey)");
 				$oNatIpSet = new CMDBObjectSet($oNatIpSearch);
 				$oIpSet = array();
+				$iCountIp1 = 0;
+				$iCountIp2 = 0;
 				while ($oNatIp = $oNatIpSet->fetch())
 				{
 					if ($oNatIp->Get('ip1_id') == $iKey)
 					{
 						$iIpKey = $oNatIp->Get('ip2_id');
+						$iCountIp1++;
 					}
 					else
 					{
 						$iIpKey = $oNatIp->Get('ip1_id');
+						$iCountIp2++;
 					}
 					$oIpSet[] = MetaModel::GetObject('IPAddress', $iIpKey, false);
 				}
 				$oSet = CMDBObjectSet::FromArray('IPAddress', $oIpSet);
+				// Ugly: this is to handle the current (2.0.3) iTop's limitation that doesn't handle the symetrical AttributeLinkedSetIndirect to lnkIPAdressToIPAddress
+				// Note that $oPage->FinTab doesn't work...
+				$oPage->RemoveTab(Dict::Format('Class:IPAddress/Attribute:ip_list'));
+				$oPage->RemoveTab(Dict::Format('Class:IPAddress/Tab:ip_list', $iCountIp1));
 				$oPage->SetCurrentTab(Dict::Format('Class:IPAddress/Tab:ip_list', $oNatIpSet->Count()));
 				$oPage->p(MetaModel::GetClassIcon('IPAddress').'&nbsp;'.Dict::Format('Class:IPAddress/Tab:ip_list+'));
 				if ($oNatIpSet->Count() != 0)
@@ -256,34 +264,6 @@ class _IPAddress extends IPObject
 		}
 	}
 	
-	/*
-	 * Perform actions when new object inserted in DB 
-	 */
-	protected function OnInsert()
-	{
-		// Run standard checks first
-		parent::OnInsert();
-		
-		if ($this->Get('status') == 'allocated')
-		{
-			$this->Set('allocation_date', time());
-		}
-	}
-	
-	/*
-	 * Perform actions when new object inserted in DB 
-	 */
-	protected function OnUpdate()
-	{
-		// Run standard checks first
-		parent::OnUpdate();
-		
-		if (($this->Get('status') == 'allocated') && ($this->GetOriginal('status') != 'allocated'))
-		{
-			$this->Set('allocation_date', time());
-		}
-	}
-	 
 	/**
 	 * Change flag of attributes that shouldn't be modified beside creation.
 	 */
@@ -299,4 +279,58 @@ class _IPAddress extends IPObject
 		}
 		return parent::GetAttributeFlags($sAttCode, $aReasons, $sTargetState);
 	}
+	
+	/**
+	 * Manage status of IP when attached to a device 
+	 */					   
+	public static function SetStatusOnAttachment ($iIpId = null, $iPreviousIpId = null)
+	{
+		if ($iIpId != $iPreviousIpId) 
+		{
+			if ($iIpId != null)
+			{
+				$oIP = MetaModel::GetObject('IPAddress', $iIpId, false /* MustBeFound */);
+				if ($oIP != null)
+				{
+					if ($oIP->Get('status') != 'allocated')
+					{
+						$oIP->Set('status', 'allocated');	
+						$oIP->DBUpdate();
+					}
+				}
+			}
+			if ($iPreviousIpId != null)
+			{
+				$oIP = MetaModel::GetObject('IPAddress', $iPreviousIpId, false /* MustBeFound */);
+				if ($oIP != null)
+				{
+					if ($oIP->Get('status') == 'allocated')
+					{
+						$oIP->Set('status', 'unassigned');	
+						$oIP->DBUpdate();
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Manage status of IP when deattached from a device 
+	 */
+	public static function SetStatusOnDetachment ($iIpId = null)
+	{
+		if ($iIpId != null)
+		{
+			$oIP = MetaModel::GetObject('IPAddress', $iIpId, false /* MustBeFound */);
+			if ($oIP != null)
+			{
+				if ($oIP->Get('status') == 'allocated')
+				{
+					$oIP->Set('status', 'unassigned');
+					$oIP->DBUpdate();
+				}
+			}
+		}
+	}
+	
 }

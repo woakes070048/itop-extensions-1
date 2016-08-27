@@ -120,8 +120,8 @@ class _IPRange extends IPObject
 			$sOrgId = $this->Get('org_id');
 			if ($sOrgId != null)
 			{
-				$sLowWaterMark = GetFromGlobalIPConfig('iprange_low_watermark', $sOrgId);
-				$sHighWaterMark = GetFromGlobalIPConfig('iprange_high_watermark', $sOrgId);
+				$sLowWaterMark = IPConfig::GetFromGlobalIPConfig('iprange_low_watermark', $sOrgId);
+				$sHighWaterMark = IPConfig::GetFromGlobalIPConfig('iprange_high_watermark', $sOrgId);
 				if ($Occupancy >= $sHighWaterMark)
 				{
 					$sColor = RED;

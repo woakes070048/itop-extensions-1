@@ -30,7 +30,7 @@
 // Class: DNSObject
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:DNSObject' => 'DNS object',
 	'Class:DNSObject+' => '',
 	'Class:DNSObject/Attribute:org_id' => 'Organization',
@@ -47,7 +47,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: Domain
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:Domain' => 'Domain',
 	'Class:Domain+' => 'DNS Domain',
 	'Class:Domain:baseinfo' => 'General Information',
@@ -83,7 +83,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class extensions for Domain
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:Domain/Tab:hosts' => 'Hosts (%1$s)',
 	'Class:Domain/Tab:hosts+' => 'Hosts that belong to the domain',
 	'Class:Domain/Tab:child_domain' => 'Child Domains (%1$s)',
@@ -94,7 +94,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: WANLink
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:WANLink' => 'WAN Link',
 	'Class:WANLink+' => 'Wide Area Network Link',
 	'Class:WANLink:baseinfo' => 'General Information',
@@ -158,7 +158,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: WANType
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:WANType' => 'WAN Type',
 	'Class:WANType+' => '',
 	'Class:WANType/Attribute:description' => 'Description',
@@ -169,7 +169,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: ASNumber
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:ASNumber' => 'AS Number',
 	'Class:ASNumber+' => 'Autonomous System Number',
 	'Class:ASNumber:baseinfo' => 'General Information',
@@ -194,7 +194,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: VRF
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:VRF' => 'VRF',
 	'Class:VRF+' => 'Virtual Routing and Forwarding',
 	'Class:VRF/Attribute:route_dist' => 'Route Distinguisher',
@@ -211,7 +211,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Class: lnkPhysicalInterfaceToVRF
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Class:lnkPhysicalInterfaceToVRF' => 'Link PhysicalInterface / VRF',
 	'Class:lnkPhysicalInterfaceToVRF+' => '',
 	'Class:lnkPhysicalInterfaceToVRF/Attribute:physicalinterface_id' => 'Physical Interface',
@@ -232,7 +232,7 @@ Dict::Add('EN US', 'English', 'English', array(
 // Application Menu
 //
 
-Dict::Add('EN US', 'English', 'English', array(
+Dict::Add('ES CR', 'Spanish', 'Español, Castellano', array(
 	'Menu:ConfigManagement:Network' => 'Network',
 	'Menu:ConfigManagement:Network+' => '',
 
