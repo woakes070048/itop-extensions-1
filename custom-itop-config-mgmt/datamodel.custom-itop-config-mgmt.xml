@@ -364,6 +364,11 @@
           <default_value/>
           <is_null_allowed>true</is_null_allowed>
         </field>
+        <field id="lucidchart" xsi:type="AttributeString" _delta="define">
+          <sql>lucidchart</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
       </fields>
       <presentation>
         <details _delta="redefine">
@@ -398,6 +403,9 @@
             <item id="cost_center">
               <rank>100</rank>
             </item>
+            <item id="lucidchart">
+              <rank>110</rank>
+            </item>
           </items>
         </details>
         <search>
@@ -426,6 +434,9 @@
             <item id="cost_center">
               <rank>80</rank>
             </item>
+            <item id="lucidchart">
+              <rank>90</rank>
+            </item>
           </items>
         </search>
         <list>
@@ -444,6 +455,9 @@
             </item>
             <item id="cost_center">
               <rank>50</rank>
+            </item>
+            <item id="lucidchart">
+              <rank>60</rank>
             </item>
           </items>
         </list>
