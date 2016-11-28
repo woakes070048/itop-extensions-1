@@ -13,7 +13,7 @@
 <subject>The ticket $this-&gt;ref$ has been updated</subject>
 <body>&lt;html&gt;
 &lt;body&gt;
-&lt;p&gt;$this-&gt;head(public_log)$&lt;/p&gt;
+$this-&gt;head_html(public_log)$
 &lt;/body&gt;
 &lt;/html&gt;</body>
 <importance>normal</importance>

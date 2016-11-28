@@ -16,7 +16,7 @@
 
 SetupWebPage::AddModule(
 	__FILE__, // Path to the current file, all other file names are relative to the directory containing this file
-	'email-reply/1.0.0',
+	'email-reply/1.1.9',
 	array(
 		// Identification
 		//
@@ -26,6 +26,7 @@ SetupWebPage::AddModule(
 		// Setup
 		//
 		'dependencies' => array(
+			'itop-request-mgmt-itil/2.0.0||itop-request-mgmt/1.0.0||itop-incident-mgmt-itil//1.0.0', // Actually needed for the sample data
 		),
 		'mandatory' => false,
 		'visible' => true,

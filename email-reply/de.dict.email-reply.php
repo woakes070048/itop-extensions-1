@@ -1,5 +1,5 @@
 <?php
-// Copyright (C) 2012-2015 Combodo SARL
+// Copyright (C) 2010-2015 Combodo SARL
 //
 //   This program is free software; you can redistribute it and/or modify
 //   it under the terms of the GNU General Public License as published by
@@ -27,17 +27,17 @@
 // Class: TriggerOnLogUpdate
 //
 
-Dict::Add('EN US', 'English', 'English', array(
-	'Class:TriggerOnLogUpdate' => 'Trigger (when log is updated)',
-	'Class:TriggerOnLogUpdate+' => 'Trigger on a end-user\'s update in log',
-	'Class:TriggerOnLogUpdate/Attribute:target_log' => 'Log attribute code',
-	'Class:TriggerOnLogUpdate/Attribute:target_log+' => 'Identifies which log will be considered',
+Dict::Add('DE DE', 'German', 'Deutsch', array(
+	'Class:TriggerOnLogUpdate' => 'Trigger (wenn ein Log aktualisiert wird)',
+	'Class:TriggerOnLogUpdate+' => 'Trigger auf ein Update eines Logs durch einen Endbenutzer',
+	'Class:TriggerOnLogUpdate/Attribute:target_log' => 'Attributname des Logs',
+	'Class:TriggerOnLogUpdate/Attribute:target_log+' => 'Bezeichnet das zu berücksictigende log (z.B. public_log)',
 
-	'UI-emry-enable' => 'Send the reply by email',
-	'UI-emry-noattachment' => 'No attachment',
-	'UI-emry-caselog-prompt' => 'Type your text here',
-	'UI-emry-select-attachments' => 'Select Attachments...',
-	'UI-emry-attachments-to-be-sent' => 'The following attachments will be sent:',
-	'UI-emry-select-attachments-tooltip' => 'Click to select the attachments to be sent',
+	'UI-emry-enable' => 'Send the reply by email~~',
+	'UI-emry-noattachment' => 'Kein Attachment',
+	'UI-emry-caselog-prompt' => 'Type your text here~~',
+	'UI-emry-select-attachments' => 'Select Attachments...~~',
+	'UI-emry-attachments-to-be-sent' => 'The following attachments will be sent:~~',
+	'UI-emry-select-attachments-tooltip' => 'Click to select the attachments to be sent~~',
 ));
 
