@@ -29,13 +29,15 @@ class IMAPEmailSource extends EmailSource
 {
 	protected $rImapConn = null;
 	protected $sLogin = '';
-	
+	protected $sMailbox = '';
+
 	public function __construct($sServer, $iPort, $sLogin, $sPwd, $sMailbox, $aOptions)
 	{
 		parent::__construct();
 		$this->sLastErrorSubject = '';
 		$this->sLastErrorMessage = '';
 		$this->sLogin = $sLogin;
+		$this->sMailbox = $sMailbox;
 
 		$sOptions = '';
 		if (count($aOptions) > 0)
@@ -81,6 +83,13 @@ class IMAPEmailSource extends EmailSource
 		$sBody = imap_body($this->rImapConn, 1+$index, FT_PEEK);
 		$aOverviews = imap_fetch_overview($this->rImapConn, 1+$index);
 		$oOverview = array_pop($aOverviews);
+
+		$bUseMessageId = (bool) MetaModel::GetModuleSetting('combodo-email-synchro', 'use_message_id_as_uid', false);
+		if ($bUseMessageId)
+		{
+			$oOverview->uid = $oOverview->message_id;
+		}
+
 		return new MessageFromMailbox($oOverview->uid, $sRawHeaders, $sBody);
 	}
 
@@ -101,7 +110,15 @@ class IMAPEmailSource extends EmailSource
 	 {
 	 	return $this->sLogin;
 	 }
-	 
+
+	/**
+	 * Mailbox path of the eMail source
+	 */
+	public function GetMailbox()
+	{
+		return $this->sMailbox;
+	}
+
 	/**
 	 * Get the list (with their IDs) of all the messages
 	 * @return Array An array of hashes: 'msg_id' => index 'uild' => message identifier
@@ -111,8 +128,8 @@ class IMAPEmailSource extends EmailSource
 	 	$ret = null;
 	 	
 	 	$oInfo = imap_check($this->rImapConn);
-        if ($oInfo !== false)
-        {
+        if (($oInfo !== false) && ($oInfo->Nmsgs > 0))
+		{
         	$sRange = "1:".$oInfo->Nmsgs;
 		// Workaround for some email servers (like gMail!) where the UID may change between two sessions, so let's use the
 		// MessageID as a replacement for the UID.
