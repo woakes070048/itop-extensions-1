@@ -42,6 +42,16 @@
           <default_value/>
           <is_null_allowed>true</is_null_allowed>
         </field>
+        <field id="airwave_id" xsi:type="AttributeString" _delta="define">
+          <sql>airwave_id</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="icinga_id" xsi:type="AttributeString" _delta="define">
+          <sql>icinga_id</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
       </fields>
       <methods>
         <method id="DoCheckToWrite" _delta="define">
