@@ -47,21 +47,6 @@
           <default_value/>
           <is_null_allowed>true</is_null_allowed>
         </field>
-        <field id="airwave_group_id" xsi:type="AttributeString" _delta="define">
-          <sql>airwave_group_id</sql>
-          <default_value/>
-          <is_null_allowed>true</is_null_allowed>
-        </field>
-        <field id="airwave_folder_id" xsi:type="AttributeString" _delta="define">
-          <sql>airwave_folder_id</sql>
-          <default_value/>
-          <is_null_allowed>true</is_null_allowed>
-        </field>
-        <field id="airwave_cluster_id" xsi:type="AttributeString" _delta="define">
-          <sql>airwave_cluster_id</sql>
-          <default_value/>
-          <is_null_allowed>true</is_null_allowed>
-        </field>
         <field id="icinga_id" xsi:type="AttributeString" _delta="define">
           <sql>icinga_id</sql>
           <default_value/>
@@ -391,6 +376,21 @@
         </field>
         <field id="lucidchart" xsi:type="AttributeString" _delta="define">
           <sql>lucidchart</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="airwave_group_id" xsi:type="AttributeString" _delta="define">
+          <sql>airwave_group_id</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="airwave_folder_id" xsi:type="AttributeString" _delta="define">
+          <sql>airwave_folder_id</sql>
+          <default_value/>
+          <is_null_allowed>true</is_null_allowed>
+        </field>
+        <field id="airwave_cluster_id" xsi:type="AttributeString" _delta="define">
+          <sql>airwave_cluster_id</sql>
           <default_value/>
           <is_null_allowed>true</is_null_allowed>
         </field>
