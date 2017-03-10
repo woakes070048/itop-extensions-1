@@ -79,6 +79,9 @@
             <item id="providercontracts_list">
               <rank>170</rank>
             </item>
+            <item id="cimodelpricing_list" _delta="define">
+              <rank>180</rank>
+            </item>
           </items>
         </details>
         <search _delta="redefine">
@@ -294,7 +297,7 @@
           <extkey_attcode>ci_model_id</extkey_attcode>
           <target_attcode>name</target_attcode>
         </field>
-        <field id="price" xsi:type="AttributeInteger" _delta="define">
+        <field id="price" xsi:type="AttributeInteger">
           <sql>price</sql>
           <is_null_allowed>false</is_null_allowed>
         </field>
